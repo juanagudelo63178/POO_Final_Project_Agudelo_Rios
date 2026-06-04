@@ -1,5 +1,6 @@
 package domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -21,26 +22,58 @@ public class ParkingLot {
 
     public void registerEntry(Ticket ticket) {
         tickets.add(ticket);
+        vehicles.add(ticket.getVehicle());
     }
 
     public void registerExit(String plate) {
 
+        for(Ticket ticket:tickets){
+            if(ticket.getVehicle().getPlate().equalsIgnoreCase(plate)){
+                ticket.setExitTime(LocalDateTime.now());
+                ticket.calculateFee();
+                Payment payment = new Payment(ticket.getFee(),"cash");
+                payment.processPayment();
+                ticket.setPayment(payment);
+                ticket.geParkingSpot().removeVehicle();
+                break;
+            }
+        }
     }
 
     public Vehicle findVehicle(String plate) {
+        for(Vehicle vehicle:vehicles){
+            if(vehicle.getPlate().equalsIgnoreCase(plate)){
+                return vehicle;
+            }
+        }
         return null;
     }
 
     public int getAvailableSpots() {
-        return 0;
+        int available=0;
+        for(ParkingSpot spot : parkingSpots){
+            if(!spot.isOccupied()){
+                available++;
+            }
+        }
+        return available;
     }
 
     public Report generateReport() {
-        return null;
+        int totalVehicles = vehicles.size();
+        double totalRevenue=0;
+
+        for(Ticket ticket:tickets){
+            totalRevenue+=ticket.getFee();
+        }
+        return new Report(totalVehicles, totalRevenue);
     }
 
     public double predictOccupancy() {
-        return 0;
+        if(parkingSpots.isEmpty()){
+            return 0;
+        }
+        return ((double) vehicles.size()/parkingSpots.size())*100; 
     }
 
     public int getTotalTickets() {

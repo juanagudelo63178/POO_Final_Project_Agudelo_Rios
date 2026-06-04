@@ -19,4 +19,8 @@ public class Car extends Vehicle {
     public int getNumberOfDoors() {
         return numberOfDoors;
     }
+    @Override
+    public double getHourlyRate(){
+        return 2.0;
+    }
 }

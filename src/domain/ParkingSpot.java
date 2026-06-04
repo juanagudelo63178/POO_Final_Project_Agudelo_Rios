@@ -14,8 +14,16 @@ public class ParkingSpot {
         this.occupied = false;
     }
 
+    public int getSpotNumber(){
+        return spotNumber;
+    }
+
     public boolean isOccupied() {
         return occupied;
+    }
+
+    public Vehicle getCurrentVehicle(){
+        return currentVehicle;
     }
 
     public void parkVehicle(Vehicle vehicle) {

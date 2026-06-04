@@ -1,5 +1,6 @@
 package domain;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
@@ -33,7 +34,45 @@ public class Ticket {
         return fee;
     }
 
-    public void calculateFee() {
-        fee = 10.0;
+    public String getId(){
+        return id;
     }
+
+    public Vehicle getVehicle(){
+        return vehicle;
+    }
+
+    public ParkingSpot geParkingSpot(){
+        return parkingSpot;
+    }
+
+    public Payment getPayment(){
+        return  payment;
+    }
+
+    public void setPayment(Payment payment){
+        this.payment = payment;
+    }
+
+    public void setExitTime(LocalDateTime exitTime){
+        this.exitTime = exitTime;
+    }
+    
+    public long getDuration(){
+        if (exitTime == null){
+            return 0;
+        }
+        return Duration.between(entryTime,exitTime).toHours();
+    }
+
+    public void calculateFee() {
+        long hours = getDuration();
+        if(hours==0){
+            fee=0;
+        }else{
+            fee=hours*vehicle.getHourlyRate();
+        }
+
+    }
+    
 }

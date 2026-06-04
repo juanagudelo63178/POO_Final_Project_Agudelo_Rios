@@ -19,4 +19,9 @@ public class Motorcycle extends Vehicle {
     public int getEngineCapacity() {
         return engineCapacity;
     }
+    
+    @Override
+    public double getHourlyRate(){
+        return 1.0;
+    }
 }

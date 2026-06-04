@@ -28,4 +28,6 @@ public abstract class Vehicle {
     public LocalDateTime getEntryTime() {
         return entryTime;
     }
+
+    public abstract double getHourlyRate();
 }
