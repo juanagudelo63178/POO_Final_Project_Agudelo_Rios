@@ -42,7 +42,7 @@ public class Ticket {
         return vehicle;
     }
 
-    public ParkingSpot geParkingSpot(){
+    public ParkingSpot getParkingSpot(){
         return parkingSpot;
     }
 

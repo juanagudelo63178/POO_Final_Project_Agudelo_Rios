@@ -25,6 +25,18 @@ public class ParkingLot {
         vehicles.add(ticket.getVehicle());
     }
 
+    public void addParkingSpot(ParkingSpot parkingSpot) {
+    parkingSpots.add(parkingSpot);
+    }
+
+    public void addEmployee(Employee employee) {
+    employees.add(employee);
+    }
+
+    public void addVehicle(Vehicle vehicle) {
+    vehicles.add(vehicle);
+    }
+
     public void registerExit(String plate) {
 
         for(Ticket ticket:tickets){
@@ -34,7 +46,7 @@ public class ParkingLot {
                 Payment payment = new Payment(ticket.getFee(),"cash");
                 payment.processPayment();
                 ticket.setPayment(payment);
-                ticket.geParkingSpot().removeVehicle();
+                ticket.getParkingSpot().removeVehicle();
                 break;
             }
         }
