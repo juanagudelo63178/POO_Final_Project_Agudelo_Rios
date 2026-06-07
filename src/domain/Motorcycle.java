@@ -9,9 +9,7 @@ public class Motorcycle extends Vehicle {
 
     private int engineCapacity;
 
-    public Motorcycle(String plate, String brand,
-                      LocalDateTime entryTime,
-                      int engineCapacity) {
+    public Motorcycle(String plate, String brand,LocalDateTime entryTime,int engineCapacity) {
         super(plate, brand, entryTime);
         this.engineCapacity = engineCapacity;
     }

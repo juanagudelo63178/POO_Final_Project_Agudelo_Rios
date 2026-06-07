@@ -9,9 +9,7 @@ public class Car extends Vehicle {
 
     private int numberOfDoors;
 
-    public Car(String plate, String brand,
-               LocalDateTime entryTime,
-               int numberOfDoors) {
+    public Car(String plate, String brand,LocalDateTime entryTime,int numberOfDoors) {
         super(plate, brand, entryTime);
         this.numberOfDoors = numberOfDoors;
     }

@@ -71,6 +71,15 @@ public class ParkingLot {
         return available;
     }
 
+    public ParkingSpot getAvailableSpot(){
+        for(ParkingSpot spot : parkingSpots){
+            if(!spot.isOccupied()){
+                return spot;
+            }
+        }
+        return null;
+    }
+
     public Report generateReport() {
         int totalVehicles = vehicles.size();
         double totalRevenue=0;
@@ -91,4 +100,5 @@ public class ParkingLot {
     public int getTotalTickets() {
         return tickets.size();
     }
+    
 }

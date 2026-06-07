@@ -18,10 +18,7 @@ public class Ticket {
     private Employee employee;
     private Payment payment;
 
-    public Ticket(String id,
-                  Vehicle vehicle,
-                  ParkingSpot parkingSpot,
-                  Employee employee) {
+    public Ticket(String id,Vehicle vehicle,ParkingSpot parkingSpot,Employee employee) {
 
         this.id = id;
         this.vehicle = vehicle;
