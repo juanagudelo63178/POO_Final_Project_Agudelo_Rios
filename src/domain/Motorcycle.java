@@ -8,18 +8,19 @@ import java.time.LocalDateTime;
 public class Motorcycle extends Vehicle {
 
     private int engineCapacity;
+    private double HOURLY_RATE = 1.0;//constante.
 
     public Motorcycle(String plate, String brand,LocalDateTime entryTime,int engineCapacity) {
         super(plate, brand, entryTime);
         this.engineCapacity = engineCapacity;
     }
 
-    public int getEngineCapacity() {
+    public int getEngineCapacity() { //darle mas logica al atributo
         return engineCapacity;
     }
     
     @Override
     public double getHourlyRate(){
-        return 1.0;
+        return this.HOURLY_RATE;
     }
 }

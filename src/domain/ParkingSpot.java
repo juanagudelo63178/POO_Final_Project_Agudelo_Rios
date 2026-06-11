@@ -7,7 +7,7 @@ public class ParkingSpot {
 
     private int spotNumber;
     private boolean occupied;
-    private Vehicle currentVehicle;
+    private Vehicle currentVehicle;//no hace falta poner vehiculo, el espacio existe 
 
     public ParkingSpot(int spotNumber) {
         this.spotNumber = spotNumber;

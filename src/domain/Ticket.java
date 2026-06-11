@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 /**
  * Represents a parking ticket.
  */
+
+//mejorar la logica de solo registrar una vez el vehiculo.
 public class Ticket {
 
     private String id;

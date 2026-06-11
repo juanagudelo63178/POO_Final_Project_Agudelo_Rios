@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  */
 public class Car extends Vehicle {
 
-    private int numberOfDoors;
+    private int numberOfDoors;// espacio para discapacitados 
 
     public Car(String plate, String brand,LocalDateTime entryTime,int numberOfDoors) {
         super(plate, brand, entryTime);
