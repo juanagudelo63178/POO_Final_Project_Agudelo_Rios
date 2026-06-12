@@ -7,20 +7,23 @@ import java.time.LocalDateTime;
  */
 public class Motorcycle extends Vehicle {
 
-    private int engineCapacity;
+    private boolean highDisplacement;
     private double HOURLY_RATE = 1.0;//constante.
 
-    public Motorcycle(String plate, String brand,LocalDateTime entryTime,int engineCapacity) {
+    public Motorcycle(String plate, String brand,LocalDateTime entryTime,boolean highDisplacement) {
         super(plate, brand, entryTime);
-        this.engineCapacity = engineCapacity;
+        this.highDisplacement = highDisplacement;
     }
-
-    public int getEngineCapacity() { //darle mas logica al atributo
-        return engineCapacity;
-    }
+    public boolean isHighDisplacement() {
+        return highDisplacement;
+    } 
     
     @Override
-    public double getHourlyRate(){
-        return this.HOURLY_RATE;
+    public double getHourlyRate() {
+
+      if(highDisplacement) {
+        return 2.5;
+      }
+        return 1.5;
     }
 }

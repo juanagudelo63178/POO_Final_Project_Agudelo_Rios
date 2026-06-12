@@ -101,4 +101,18 @@ public class ParkingLot {
         return tickets.size();
     }
     
+    public int getOccupiedSpotsByFloor(int floor) {
+
+     int occupied = 0;
+
+     for (ParkingSpot spot : parkingSpots) {
+
+        if (spot.getFloor() == floor && spot.isOccupied()) {
+            occupied++;
+        }
+     }
+
+     return occupied;
+    }
+    
 }

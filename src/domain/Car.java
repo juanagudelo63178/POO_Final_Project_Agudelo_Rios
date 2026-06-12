@@ -7,18 +7,22 @@ import java.time.LocalDateTime;
  */
 public class Car extends Vehicle {
 
-    private int numberOfDoors;// espacio para discapacitados 
+    private boolean disabledVehicle;
 
-    public Car(String plate, String brand,LocalDateTime entryTime,int numberOfDoors) {
+    public Car(String plate, String brand,LocalDateTime entryTime,boolean disabledVehicle) {
         super(plate, brand, entryTime);
-        this.numberOfDoors = numberOfDoors;
+        this.disabledVehicle = disabledVehicle;
+    }
+    public boolean isDisabledVehicle() {
+        return disabledVehicle;
     }
 
-    public int getNumberOfDoors() {
-        return numberOfDoors;
-    }
     @Override
-    public double getHourlyRate(){
+    public double getHourlyRate() {
+
+        if(disabledVehicle) {
+            return 1.0;
+        }
         return 2.0;
     }
 }
