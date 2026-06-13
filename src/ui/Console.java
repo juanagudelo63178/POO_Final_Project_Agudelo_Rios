@@ -183,7 +183,11 @@ public class Console {
         Vehicle vehicle = parkingLot.findVehicle(plate);
 
         if(vehicle != null) {
-            System.out.println("Vehicle found.");
+            System.out.println("===== VEHICLE INFORMATION =====");
+            System.out.println("Plate: " + vehicle.getPlate());
+            System.out.println("Brand: " + vehicle.getBrand());
+            System.out.println("Type: " + vehicle.getClass().getSimpleName());
+
         } else {
             System.out.println("Vehicle not found.");
         }
