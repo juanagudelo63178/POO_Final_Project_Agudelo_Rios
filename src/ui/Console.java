@@ -45,6 +45,7 @@ public class Console {
             System.out.println("3. Show Available Spots");
             System.out.println("4. Generate Report");
             System.out.println("5. Search Vehicle");
+            System.out.println("6. Show Vehicles Parked");
             System.out.println("0. Exit");
 
             System.out.print("Select an option: ");
@@ -70,6 +71,9 @@ public class Console {
                 case 5:
                     searchVehicle();
                     break;
+                case 6:
+                    showParkedVehicles();
+                    break;
                 case 0:
                     System.out.println("Closing system...");
                     break;
@@ -83,6 +87,12 @@ public class Console {
     private void registerVehicleEntry() {
         System.out.print("Enter plate: ");
         String plate = scanner.next();
+        if (parkingLot.findVehicle(plate) != null) {
+        System.out.println("Vehicle already registered.");
+        return;
+}
+        System.out.print("Enter brand: ");
+        String brand = scanner.next();
         System.out.println("Vehicle type:");
         System.out.println("1. Car");
         System.out.println("2. Motorcycle");
@@ -93,23 +103,33 @@ public class Console {
         Vehicle vehicle;
         if(vehicleType == 1) {
 
-            System.out.print("Disabled vehicle? (true/false): ");
-            boolean disabled = scanner.nextBoolean();
+            System.out.println("Is this a disabled vehicle?");
+            System.out.println("1. Yes");
+            System.out.println("2. No");
+            System.out.print("Select: ");
+
+            int disabledOption = scanner.nextInt();
+            boolean disabled = (disabledOption == 1);
 
             vehicle = new Car(
                     plate,
-                    "Toyota",
+                    brand,
                     java.time.LocalDateTime.now(),
                     disabled
             );
         } else {
 
-            System.out.print("High displacement motorcycle? (true/false): ");
-            boolean highDisplacement = scanner.nextBoolean();
+            System.out.println("Is it a high displacement motorcycle?");
+            System.out.println("1. Yes");
+            System.out.println("2. No");
+            System.out.print("Select: ");
+
+            int displacementOption = scanner.nextInt();
+            boolean highDisplacement = (displacementOption == 1);
 
             vehicle = new Motorcycle(
             plate,
-            "Yamaha",
+            brand,
             java.time.LocalDateTime.now(),
             highDisplacement
         );
@@ -187,9 +207,49 @@ public class Console {
             System.out.println("Plate: " + vehicle.getPlate());
             System.out.println("Brand: " + vehicle.getBrand());
             System.out.println("Type: " + vehicle.getClass().getSimpleName());
+            
+            ParkingSpot spot = parkingLot.findVehicleSpot(plate);
 
-        } else {
+            if (spot != null) {
+            System.out.println("Spot: " + spot.getSpotNumber());
+            System.out.println("Floor: " + spot.getFloor());
+            }
+            if (vehicle instanceof Car) {
+
+                Car car = (Car) vehicle;
+
+                System.out.println("Disabled Vehicle: " +
+                (car.isDisabledVehicle() ? "Yes" : "No"));
+
+            } else if (vehicle instanceof Motorcycle) {
+
+                Motorcycle motorcycle = (Motorcycle) vehicle;
+
+                System.out.println("High Displacement: " +
+                (motorcycle.isHighDisplacement() ? "Yes" : "No"));
+            }
+        } 
+        else {
             System.out.println("Vehicle not found.");
         }
     }
+    private void showParkedVehicles() {
+
+    System.out.println("===== PARKED VEHICLES =====");
+
+    if (parkingLot.getVehicles().isEmpty()) {
+        System.out.println("No vehicles parked.");
+        return;
+    }
+
+    for (Vehicle vehicle : parkingLot.getVehicles()) {
+
+        System.out.println(
+            vehicle.getPlate() + " - " +
+            vehicle.getBrand() + " - " +
+            vehicle.getClass().getSimpleName()
+        );
+    }
+}
+
 }   

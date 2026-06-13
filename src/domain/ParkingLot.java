@@ -114,5 +114,21 @@ public class ParkingLot {
 
      return occupied;
     }
-    
+
+    public ArrayList<Vehicle> getVehicles() {
+    return vehicles;
+}
+public ParkingSpot findVehicleSpot(String plate) {
+
+    for (ParkingSpot spot : parkingSpots) {
+
+        if (spot.isOccupied()
+                && spot.getCurrentVehicle().getPlate().equalsIgnoreCase(plate)) {
+
+            return spot;
+        }
+    }
+
+    return null;
+}
 }
