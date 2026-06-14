@@ -116,19 +116,19 @@ public class ParkingLot {
     }
 
     public ArrayList<Vehicle> getVehicles() {
-    return vehicles;
-}
-public ParkingSpot findVehicleSpot(String plate) {
-
-    for (ParkingSpot spot : parkingSpots) {
-
-        if (spot.isOccupied()
-                && spot.getCurrentVehicle().getPlate().equalsIgnoreCase(plate)) {
-
-            return spot;
-        }
+        return vehicles;
     }
+    public ParkingSpot findVehicleSpot(String plate) {
 
-    return null;
-}
+        for (ParkingSpot spot : parkingSpots) {
+
+            if (spot.isOccupied()
+                    && spot.getCurrentVehicle().getPlate().equalsIgnoreCase(plate)) {
+
+                return spot;
+            }
+        }
+
+        return null;
+    }
 }
