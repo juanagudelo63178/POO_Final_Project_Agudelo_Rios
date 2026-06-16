@@ -265,4 +265,32 @@ public class ParkingLot {
 
         return null;
     }
+    public ParkingSpot findParkingSpot(int floor, int spotNumber) {
+
+        for (ParkingSpot spot : parkingSpots) {
+
+            if (spot.getFloor() == floor &&
+                spot.getSpotNumber() == spotNumber) {
+
+                return spot;
+            }
+        }
+
+        return null;
+    }
+    public ArrayList<Vehicle> getVehiclesByFloor(int floor) {
+
+        ArrayList<Vehicle> vehiclesOnFloor = new ArrayList<>();
+
+        for (ParkingSpot spot : parkingSpots) {
+
+            if (spot.getFloor() == floor &&
+                spot.isOccupied()) {
+
+                vehiclesOnFloor.add(spot.getCurrentVehicle());
+            }
+        }
+
+        return vehiclesOnFloor;
+    }
 }

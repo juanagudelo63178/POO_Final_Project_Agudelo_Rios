@@ -8,6 +8,7 @@ import domain.ParkingSpot;
 import domain.Report;
 import domain.Ticket;
 import domain.Vehicle;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Console {
@@ -66,6 +67,11 @@ public class Console {
             System.out.println("10. Predict Occupancy");
             System.out.println("11. Search Ticket");
             System.out.println("12. Show All Tickets");
+            System.out.println("13. Search Parking Spot");
+            System.out.println("14. Show Parking Statistics");
+            System.out.println("15. Show Floor Details");
+            System.out.println("16. Employee Ranking");
+
             System.out.println("0. Exit");
 
             System.out.print("Select an option: ");
@@ -101,7 +107,7 @@ public class Console {
                     showOccupiedSpots();
                     break;
                 case 9:
-                    showEmployees();
+                    searchEmployee();
                     break;
                 case 10:
                     predictOccupancy();
@@ -111,6 +117,18 @@ public class Console {
                     break;
                 case 12:
                     showAllTickets();
+                    break;
+                case 13:
+                    searchParkingSpot();
+                    break;
+                case 14:
+                    showParkingStatistics();
+                    break;
+                case 15:
+                    showFloorDetails();
+                    break;
+                case 16:
+                    showEmployeeRanking();
                     break;
                 case 0:
                     System.out.println("Closing system...");
@@ -249,10 +267,31 @@ public class Console {
 
     private void showAvailableSpots() {
 
-      int available = parkingLot.getAvailableSpots();
+        System.out.println("\n===== AVAILABLE SPOTS =====");
 
-      System.out.println("Available spots: " + available);
+        for (ParkingSpot spot : parkingLot.getParkingSpots()) {
 
+            if (!spot.isOccupied()) {
+
+                System.out.println("---------------------");
+                System.out.println("Spot Number: " + spot.getSpotNumber());
+                System.out.println("Floor: " + spot.getFloor());
+
+                if (spot.isDisabledSpot()) {
+                    System.out.println("Type: Disabled");
+                } else if (spot.isHighDisplacementSpot()) {
+                    System.out.println("Type: High Displacement Motorcycle");
+                } else if (spot.isMotorcycleSpot()) {
+                    System.out.println("Type: Motorcycle");
+                } else {
+                    System.out.println("Type: Regular Car");
+                }
+            }
+        }
+
+        System.out.println("---------------------");
+        System.out.println("Total Available Spots: " +
+                parkingLot.getAvailableSpots());
     }
 
     private void generateReport() {
@@ -337,21 +376,33 @@ public class Console {
     }
     private void showParkedVehicles() {
 
-        System.out.println("===== PARKED VEHICLES =====");
-
-        if (parkingLot.getVehicles().isEmpty()) {
-            System.out.println("No vehicles parked.");
-            return;
-        }
+        System.out.println("\n===== PARKED VEHICLES =====");
 
         for (Vehicle vehicle : parkingLot.getVehicles()) {
 
-            System.out.println(
-                vehicle.getPlate() + " - " +
-                vehicle.getBrand() + " - " +
-                vehicle.getClass().getSimpleName()
-            );
+            ParkingSpot spot = parkingLot.findVehicleSpot(vehicle.getPlate());
+
+            System.out.println("---------------------");
+            System.out.println("Plate: " + vehicle.getPlate());
+            System.out.println("Brand: " + vehicle.getBrand());
+
+            if (vehicle instanceof Car) {
+                System.out.println("Type: Car");
+            } else {
+                System.out.println("Type: Motorcycle");
+            }
+
+            System.out.println("Entry Time: " + vehicle.getEntryTime());
+
+            if (spot != null) {
+                System.out.println("Spot: " + spot.getSpotNumber());
+                System.out.println("Floor: " + spot.getFloor());
+            }
         }
+
+        System.out.println("---------------------");
+        System.out.println("Total Parked Vehicles: "
+                + parkingLot.getVehicles().size());
     }
     private void showVehiclesByFloor() {
 
@@ -384,35 +435,57 @@ public class Console {
     }
     private void showOccupiedSpots() {
 
-        System.out.println("===== OCCUPIED SPOTS =====");
-
-        boolean found = false;
+        System.out.println("\n===== OCCUPIED SPOTS =====");
 
         for (ParkingSpot spot : parkingLot.getParkingSpots()) {
 
             if (spot.isOccupied()) {
 
-                System.out.println(
-                    "Spot " + spot.getSpotNumber() +
-                    " - Floor " + spot.getFloor() +
-                    " - " + spot.getCurrentVehicle().getPlate()
-                );
+                System.out.println("---------------------");
+                System.out.println("Spot Number: " + spot.getSpotNumber());
+                System.out.println("Floor: " + spot.getFloor());
+                System.out.println("Vehicle: " +
+                        spot.getCurrentVehicle().getPlate());
 
-                found = true;
+                if (spot.getCurrentVehicle() instanceof Car) {
+                    System.out.println("Type: Car");
+                } else {
+                    System.out.println("Type: Motorcycle");
+                }
             }
         }
 
-        if (!found) {
-            System.out.println("No occupied spots.");
-        }
+        System.out.println("---------------------");
+        System.out.println("Total Occupied Spots: "
+                + parkingLot.getOccupiedSpots());
     }
-    private void showEmployees() {
+    private void searchEmployee() {
 
-        System.out.println("===== EMPLOYEES =====");
+        System.out.print("Enter employee ID: ");
+        String id = scanner.next();
 
-        for (Employee employee : parkingLot.getEmployees()) {
+        Employee employee = parkingLot.getEmployeeById(id);
 
-            System.out.println(employee.getId() + " - " +employee.getName() +" - Tickets: " +parkingLot.getTicketsByEmployee(employee.getId()));
+        if (employee == null) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        System.out.println("\n===== EMPLOYEE DETAILS =====");
+        System.out.println("ID: " + employee.getId());
+        System.out.println("Name: " + employee.getName());
+        System.out.println("Tickets Processed: " + employee.getTicketsProcessed());
+        System.out.println("Revenue Generated: $" + employee.getRevenueGenerated());
+
+        for (Ticket ticket : parkingLot.getTickets()) {
+
+            if (ticket.getEmployee().getId().equalsIgnoreCase(id)) {
+
+                System.out.println("---------------------");
+                System.out.println("Ticket: " + ticket.getId());
+                System.out.println("Vehicle: " + ticket.getVehicle().getPlate());
+                System.out.println("Fee: $" + ticket.getFee());
+            }
         }
     }
     private void predictOccupancy() {
@@ -459,9 +532,9 @@ public class Console {
             System.out.println("Ticket not found.");
         }
     }
-    private void showAllTickets() {
+   private void showAllTickets() {
 
-        System.out.println("===== ALL TICKETS =====");
+        System.out.println("\n===== ALL TICKETS =====");
 
         if (parkingLot.getTickets().isEmpty()) {
             System.out.println("No tickets registered.");
@@ -470,21 +543,155 @@ public class Console {
 
         for (Ticket ticket : parkingLot.getTickets()) {
 
-            System.out.println(
-                "Ticket: " + ticket.getId() +
-                " | Plate: " + ticket.getVehicle().getPlate() +
-                " | Fee: $" + ticket.getFee() +
-                " | Employee: " + ticket.getEmployee().getName()
-            );
+            System.out.println("---------------------");
+            System.out.println("Ticket ID: " + ticket.getId());
+            System.out.println("Plate: " + ticket.getVehicle().getPlate());
+            System.out.println("Type: " +
+                    ticket.getVehicle().getClass().getSimpleName());
 
-            if (ticket.getPayment() != null) {
+            System.out.println("Spot: " +
+                    ticket.getParkingSpot().getSpotNumber());
 
-                System.out.println(
-                    "Payment: " +
-                    ticket.getPayment().getMethod()
-                );
-            } 
-            System.out.println("--------------------------------");   
+            System.out.println("Employee: " +
+                    ticket.getEmployee().getName());
+
+            System.out.println("Entry: " +
+                    ticket.getEntryTime());
+
+            if (ticket.getExitTime() != null) {
+
+                System.out.println("Exit: " +
+                        ticket.getExitTime());
+
+                System.out.println("Fee: $" +
+                        ticket.getFee());
+
+                if (ticket.getPayment() != null) {
+                    System.out.println("Payment Method: " +
+                            ticket.getPayment().getMethod());
+                }
+            } else {
+
+                System.out.println("Status: ACTIVE");
+            }
+        }
+
+        System.out.println("---------------------");
+        System.out.println("Total Tickets: "
+                + parkingLot.getTickets().size());
+    }
+    private void searchParkingSpot() {
+
+        System.out.print("Enter floor: ");
+        int floor = scanner.nextInt();
+
+        System.out.print("Enter spot number: ");
+        int spotNumber = scanner.nextInt();
+
+        ParkingSpot spot =
+                parkingLot.findParkingSpot(floor, spotNumber);
+
+        if (spot == null) {
+            System.out.println("Parking spot not found.");
+            return;
+        }
+
+        System.out.println("\n===== PARKING SPOT =====");
+        System.out.println("Floor: " + spot.getFloor());
+        System.out.println("Spot Number: " + spot.getSpotNumber());
+
+        if (spot.isDisabledSpot()) {
+            System.out.println("Type: Disabled");
+        } else if (spot.isHighDisplacementSpot()) {
+            System.out.println("Type: High Displacement Motorcycle");
+        } else if (spot.isMotorcycleSpot()) {
+            System.out.println("Type: Motorcycle");
+        } else {
+            System.out.println("Type: Regular Car");
+        }
+
+        System.out.println("Occupied: " + spot.isOccupied());
+
+        if (spot.isOccupied()) {
+
+            Vehicle vehicle = spot.getCurrentVehicle();
+
+            System.out.println("Vehicle Plate: "
+                    + vehicle.getPlate());
+
+            System.out.println("Vehicle Brand: "
+                    + vehicle.getBrand());
+
+            System.out.println("Vehicle Type: "
+                    + vehicle.getClass().getSimpleName());
+        }
+    }
+    private void showParkingStatistics() {
+
+        int cars = 0;
+        int motorcycles = 0;
+
+        for (Vehicle vehicle : parkingLot.getVehicles()) {
+
+            if (vehicle instanceof Car) {
+                cars++;
+            } else if (vehicle instanceof Motorcycle) {
+                motorcycles++;
+            }
+        }
+
+        System.out.println("\n===== PARKING STATISTICS =====");
+        System.out.println("Cars Parked: " + cars);
+        System.out.println("Motorcycles Parked: " + motorcycles);
+        System.out.println("Available Spots: " + parkingLot.getAvailableSpots());
+        System.out.println("Occupied Spots: " + parkingLot.getOccupiedSpots());
+        System.out.printf("Occupancy: %.2f%%\n",
+                parkingLot.predictOccupancy());
+    }
+    private void showFloorDetails() {
+
+        System.out.print("Enter floor: ");
+        int floor = scanner.nextInt();
+
+        int occupied = parkingLot.getOccupiedSpotsByFloor(floor);
+
+        System.out.println("\n===== FLOOR " + floor + " =====");
+        System.out.println("Occupied Spots: " + occupied);
+
+        System.out.println("\nVehicles:");
+
+        for (Vehicle vehicle : parkingLot.getVehiclesByFloor(floor)) {
+
+            System.out.println("---------------------");
+            System.out.println("Plate: " + vehicle.getPlate());
+            System.out.println("Brand: " + vehicle.getBrand());
+            System.out.println("Type: "
+                    + vehicle.getClass().getSimpleName());
+        }
+    }
+    private void showEmployeeRanking() {
+
+        System.out.println("\n===== EMPLOYEE RANKING =====");
+
+        ArrayList<Employee> employees =
+                new ArrayList<>(parkingLot.getEmployees());
+
+        employees.sort((e1, e2) ->
+                Integer.compare(
+                        e2.getTicketsProcessed(),
+                        e1.getTicketsProcessed()));
+
+        int position = 1;
+
+        for (Employee employee : employees) {
+
+            System.out.println("\n#" + position++);
+            System.out.println("ID: " + employee.getId());
+            System.out.println("Name: " + employee.getName());
+            System.out.println("Tickets: "
+                    + employee.getTicketsProcessed());
+            System.out.println("Revenue: $"
+                    + employee.getRevenueGenerated());
         }
     }
 }   
