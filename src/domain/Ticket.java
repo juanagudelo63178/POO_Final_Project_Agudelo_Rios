@@ -49,6 +49,10 @@ public class Ticket {
         return  payment;
     }
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
     public void setPayment(Payment payment){
         this.payment = payment;
     }
@@ -57,11 +61,15 @@ public class Ticket {
         this.exitTime = exitTime;
     }
     
-    public long getDuration(){
-        if (exitTime == null){
+    public long getDuration() {
+
+        if (exitTime == null) {
             return 0;
         }
-        return Duration.between(entryTime,exitTime).toHours();
+
+        long minutes = Duration.between(entryTime, exitTime).toMinutes();
+
+        return (long) Math.ceil(minutes / 60.0);
     }
 
     public void calculateFee() {
@@ -72,6 +80,13 @@ public class Ticket {
             fee=hours*vehicle.getHourlyRate();
         }
 
+    }
+    public LocalDateTime getExitTime() {
+       return exitTime;
+    }
+
+    public LocalDateTime getEntryTime() {
+        return entryTime;
     }
     
 }
