@@ -11,7 +11,6 @@ import domain.Ticket;
 import domain.Vehicle;
 import java.util.ArrayList;
 import java.util.Scanner;
-import domain.PaymentMethod;
 
 public class Console {
 
@@ -228,20 +227,23 @@ public class Console {
         System.out.print("Select: ");
 
         int paymentOption = scanner.nextInt();
-        PaymentMethod paymentMethod;
+        String paymentMethod;
 
         switch (paymentOption) {
             case 1:
-                paymentMethod = PaymentMethod.CASH;
+                paymentMethod = "Cash";
                 break;
+
             case 2:
-                paymentMethod = PaymentMethod.CREDIT_CARD;
+                paymentMethod = "Credit Card";
                 break;
+
             case 3:
-                paymentMethod = PaymentMethod.DEBIT_CARD;
+                paymentMethod = "Debit Card";
                 break;
             default:
-                paymentMethod = PaymentMethod.CASH;
+                System.out.println("Invalid payment method");
+                return;
         }
 
         boolean success = parkingLot.registerExit(plate, paymentMethod);
@@ -304,11 +306,11 @@ public class Console {
 
         System.out.println("Total vehicles registered: " + parkingLot.getTotalVehiclesRegistered());
 
-        System.out.println("Revenue (Cash): $" + report.getRevenueByPaymentMethod(PaymentMethod.CASH));
+        System.out.println("Revenue (Cash): $" + report.getRevenueByPaymentMethod("Cash"));
 
-        System.out.println("Revenue (Credit Card): $" + report.getRevenueByPaymentMethod(PaymentMethod.CREDIT_CARD));
+        System.out.println("Revenue (Credit Card): $" + report.getRevenueByPaymentMethod("Credit Card"));
 
-        System.out.println("Revenue (Debit Card): $" + report.getRevenueByPaymentMethod(PaymentMethod.DEBIT_CARD));
+        System.out.println("Revenue (Debit Card): $" + report.getRevenueByPaymentMethod("Debit Card"));
 
         System.out.println("Floor 1 occupied spots: "    + parkingLot.getOccupiedSpotsByFloor(1));
 

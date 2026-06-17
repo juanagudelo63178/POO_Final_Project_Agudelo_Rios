@@ -2,7 +2,6 @@ package domain;
 
 import java.time.Duration;
 import java.util.ArrayList;
-
 /**
  * Represents a parking lot report.
  */
@@ -57,14 +56,14 @@ public class Report {
 
         return totalRevenue / tickets.size();
     }
-    public double getRevenueByPaymentMethod(PaymentMethod method) {
+    public double getRevenueByPaymentMethod(String method) {
 
         double revenue = 0;
 
         for (Ticket ticket : tickets) {
 
             if (ticket.getPayment() != null &&
-                ticket.getPayment().getMethod() == method) {
+                ticket.getPayment().getMethod().equalsIgnoreCase(method)) {
 
                 revenue += ticket.getFee();
             }
@@ -121,12 +120,35 @@ public class Report {
         "Peak hour: " + getPeakHour() + "\n";
 
         if (mostActive != null) {
-            summary += "Most active employee: " + mostActive.getName()+ " (" + mostActive.getTicketsProcessed() + " tickets)\n";
+
+            summary += "Most active employee: " +
+                    mostActive.getName() +
+                    " (" +
+                    mostActive.getTicketsProcessed() +
+                    " tickets)\n";
+
+            summary += "Employee performance: " +
+                    mostActive.getPerformanceLevel() +
+                    "\n";
+
+            summary += "Average revenue per ticket: $" +
+                    String.format("%.2f",
+                    mostActive.getAverageRevenuePerTicket()) +
+                    "\n";
         }
         Employee highestRevenue = getHighestRevenueEmployee();
 
         if (highestRevenue != null) {
-            summary += "Highest revenue employee: " + highestRevenue.getName() + " ($" + highestRevenue.getRevenueGenerated() + ")\n";
+
+            summary += "Highest revenue employee: " +
+                    highestRevenue.getName() +
+                    " ($" +
+                    highestRevenue.getRevenueGenerated() +
+                    ")\n";
+
+            summary += "Performance level: " +
+                    highestRevenue.getPerformanceLevel() +
+                    "\n";
         }
 
         return summary;
