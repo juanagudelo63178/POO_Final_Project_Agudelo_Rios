@@ -3,6 +3,7 @@ import data.DataManager;
 import domain.Car;
 import domain.Employee;
 import domain.Motorcycle;
+import domain.ParkingAI;
 import domain.ParkingLot;
 import domain.ParkingSpot;
 import domain.Report;
@@ -10,6 +11,7 @@ import domain.Ticket;
 import domain.Vehicle;
 import java.util.ArrayList;
 import java.util.Scanner;
+import domain.PaymentMethod;
 
 public class Console {
 
@@ -226,20 +228,20 @@ public class Console {
         System.out.print("Select: ");
 
         int paymentOption = scanner.nextInt();
-        String paymentMethod;
+        PaymentMethod paymentMethod;
 
         switch (paymentOption) {
             case 1:
-                paymentMethod = "Cash";
+                paymentMethod = PaymentMethod.CASH;
                 break;
             case 2:
-                paymentMethod = "Credit Card";
+                paymentMethod = PaymentMethod.CREDIT_CARD;
                 break;
             case 3:
-                paymentMethod = "Debit Card";
+                paymentMethod = PaymentMethod.DEBIT_CARD;
                 break;
             default:
-                paymentMethod = "Cash";
+                paymentMethod = PaymentMethod.CASH;
         }
 
         boolean success = parkingLot.registerExit(plate, paymentMethod);
@@ -302,11 +304,11 @@ public class Console {
 
         System.out.println("Total vehicles registered: " + parkingLot.getTotalVehiclesRegistered());
 
-        System.out.println("Revenue (Cash): $" + report.getRevenueByPaymentMethod("Cash"));
+        System.out.println("Revenue (Cash): $" + report.getRevenueByPaymentMethod(PaymentMethod.CASH));
 
-        System.out.println("Revenue (Credit Card): $" + report.getRevenueByPaymentMethod("Credit Card"));
+        System.out.println("Revenue (Credit Card): $" + report.getRevenueByPaymentMethod(PaymentMethod.CREDIT_CARD));
 
-        System.out.println("Revenue (Debit Card): $" + report.getRevenueByPaymentMethod("Debit Card"));
+        System.out.println("Revenue (Debit Card): $" + report.getRevenueByPaymentMethod(PaymentMethod.DEBIT_CARD));
 
         System.out.println("Floor 1 occupied spots: "    + parkingLot.getOccupiedSpotsByFloor(1));
 
@@ -490,20 +492,10 @@ public class Console {
     }
     private void predictOccupancy() {
 
-        System.out.println("===== OCCUPANCY PREDICTION =====");
+        ParkingAI ai = new ParkingAI();
 
-        double occupancy = parkingLot.predictOccupancy();
-
-        System.out.println("Current occupancy: " + occupancy + "%");
-
-        if (occupancy >= 80) {
-            System.out.println("Warning: Parking lot almost full.");
-        } else if (occupancy >= 50) {
-            System.out.println("Moderate occupancy.");
-        } else {
-            System.out.println("Low occupancy.");
-        }
-    }
+        System.out.println(ai.generateAnalysis(parkingLot));
+    }   
     private void searchTicket() {
 
         System.out.print("Enter ticket ID: ");

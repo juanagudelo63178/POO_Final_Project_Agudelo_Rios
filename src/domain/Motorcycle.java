@@ -11,7 +11,7 @@ public class Motorcycle extends Vehicle {
     private double HOURLY_RATE = 1.0;//constante.
 
     public Motorcycle(String plate, String brand,LocalDateTime entryTime,boolean highDisplacement) {
-        super(plate, brand, entryTime);
+        super(plate, brand, entryTime, VehicleType.MOTORCYCLE);
         this.highDisplacement = highDisplacement;
     }
     public boolean isHighDisplacement() {

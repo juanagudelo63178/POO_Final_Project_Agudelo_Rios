@@ -57,14 +57,14 @@ public class Report {
 
         return totalRevenue / tickets.size();
     }
-    public double getRevenueByPaymentMethod(String method) {
+    public double getRevenueByPaymentMethod(PaymentMethod method) {
 
         double revenue = 0;
 
         for (Ticket ticket : tickets) {
 
             if (ticket.getPayment() != null &&
-                ticket.getPayment().getMethod().equalsIgnoreCase(method)) {
+                ticket.getPayment().getMethod() == method) {
 
                 revenue += ticket.getFee();
             }

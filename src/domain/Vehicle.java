@@ -10,11 +10,14 @@ public abstract class Vehicle {
     private String plate;
     private String brand;
     private LocalDateTime entryTime;
+    private VehicleType type;
 
-    public Vehicle(String plate, String brand, LocalDateTime entryTime) {
+    public Vehicle(String plate, String brand, LocalDateTime entryTime, VehicleType type) {
         this.plate = plate;
         this.brand = brand;
         this.entryTime = entryTime;
+        this.type = type;
+
     }
 
     public String getPlate() {
@@ -30,4 +33,9 @@ public abstract class Vehicle {
     }
 
     public abstract double getHourlyRate();
+
+    public VehicleType getType() {
+        return type;
+    }   
+
 }

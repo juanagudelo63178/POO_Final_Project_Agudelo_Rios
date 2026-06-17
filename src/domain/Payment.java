@@ -6,9 +6,10 @@ package domain;
 public class Payment {
 
     private double amount;
-    private String method;
+    private PaymentMethod method;;
 
-    public Payment(double amount, String method) {
+    public Payment(double amount, PaymentMethod method) {
+
         this.amount = amount;
         this.method = method;
         
@@ -19,7 +20,7 @@ public class Payment {
         return amount;
     }
 
-    public String getMethod() {
+    public PaymentMethod getMethod() {
         return method;
     }
 

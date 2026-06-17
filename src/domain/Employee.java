@@ -1,8 +1,5 @@
 package domain;
 
-/**
- * Represents an employee.
- */
 public class Employee {
 
     private String id;
@@ -40,4 +37,26 @@ public class Employee {
     public double getRevenueGenerated() {
         return revenueGenerated;
     }
+
+    public double getAverageRevenuePerTicket() {
+
+        if (ticketsProcessed == 0) {
+            return 0;
+        }
+
+        return revenueGenerated / ticketsProcessed;
+    }
+
+    public String getPerformanceLevel() {
+
+        if (ticketsProcessed >= 50) {
+            return "Excellent";
+        }
+
+        if (ticketsProcessed >= 20) {
+            return "Good";
+        }
+
+        return "Needs Improvement";
+    }      
 }

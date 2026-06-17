@@ -40,7 +40,7 @@ public class ParkingLot {
     vehicles.add(vehicle);
     }
 
-    public boolean registerExit(String plate, String paymentMethod){
+    public boolean registerExit(String plate,PaymentMethod paymentMethod){
 
         for (Ticket ticket : tickets) {
 

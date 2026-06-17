@@ -10,7 +10,7 @@ public class Car extends Vehicle {
     private boolean disabledVehicle;
 
     public Car(String plate, String brand,LocalDateTime entryTime,boolean disabledVehicle) {
-        super(plate, brand, entryTime);
+        super(plate, brand, entryTime, VehicleType.CAR);
         this.disabledVehicle = disabledVehicle;
     }
     public boolean isDisabledVehicle() {
