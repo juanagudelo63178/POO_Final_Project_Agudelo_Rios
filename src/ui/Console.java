@@ -4,6 +4,7 @@ import domain.Car;
 import domain.Employee;
 import domain.Motorcycle;
 import domain.ParkingAI;
+import domain.ParkingFloor;
 import domain.ParkingLot;
 import domain.ParkingSpot;
 import domain.Report;
@@ -21,31 +22,71 @@ public class Console {
     private int ticketCounter;
 
     private DataManager dataManager;
+    
 
     public Console() {
-        parkingLot = new ParkingLot();
+
+        dataManager = new DataManager();
+
+        parkingLot = dataManager.loadData();
+
         scanner = new Scanner(System.in);
         ticketCounter = 1;
-        dataManager = new DataManager();
-        ParkingSpot spot1 = new ParkingSpot(1, 1);
-        spot1.setDisabledSpot(true);
 
-        ParkingSpot spot2 = new ParkingSpot(2, 1);
+        if (parkingLot == null) {
 
-        ParkingSpot spot3 = new ParkingSpot(3, 2);
-        spot3.setHighDisplacementSpot(true);
+            parkingLot = new ParkingLot();
 
-        ParkingSpot spot4 = new ParkingSpot(4, 2);
+            for (int floorNumber = 1; floorNumber <= 5; floorNumber++) {
 
-        ParkingSpot spot5 = new ParkingSpot(5, 3);
-        spot5.setMotorcycleSpot(true);
+                ParkingFloor floor = new ParkingFloor(floorNumber);
 
-        parkingLot.addParkingSpot(spot1);
-        parkingLot.addParkingSpot(spot2);
-        parkingLot.addParkingSpot(spot3);
-        parkingLot.addParkingSpot(spot4);
-        parkingLot.addParkingSpot(spot5);
-        parkingLot.addEmployee(new Employee("EMP001", "Juan" ));
+                parkingLot.addFloor(floor);
+            }
+
+            for (ParkingFloor floor : parkingLot.getFloors()) {
+
+                int spotNumber = 1;
+
+                for (int row = 0; row < 5; row++) {
+
+                    for (int col = 0; col < 5; col++) {
+
+                        ParkingSpot spot =
+                                new ParkingSpot(spotNumber, floor.getFloorNumber());
+
+                        if (floor.getFloorNumber() == 1
+                                || floor.getFloorNumber() == 5) {
+
+                            spot.setMotorcycleSpot(true);
+
+                            if (row + col == 4) {
+                                spot.setHighDisplacementSpot(true);
+                            }
+
+                        } else {
+
+                            if (row == col) {
+                                spot.setDisabledSpot(true);
+                            }
+                        }
+
+                        floor.addSpot(spot);
+
+                        parkingLot.addParkingSpot(spot);
+
+                        floor.setSpot(row, col, spot);
+
+                        spotNumber++;
+                    }
+                }
+            }
+
+            parkingLot.addEmployee(
+                    new Employee("EMP001", "Juan")
+            );
+        }
+       
     }
 
     public void start() {
@@ -72,6 +113,8 @@ public class Console {
             System.out.println("14. Show Parking Statistics");
             System.out.println("15. Show Floor Details");
             System.out.println("16. Employee Ranking");
+            System.out.println("17. Modify Vehicle");
+            System.out.println("18. Delete Vehicle");
 
             System.out.println("0. Exit");
 
@@ -131,7 +174,14 @@ public class Console {
                 case 16:
                     showEmployeeRanking();
                     break;
+                case 17:
+                    modifyVehicle();
+                    break;
+                case 18:
+                    deleteVehicle();
+                    break;
                 case 0:
+                    dataManager.saveData(parkingLot);
                     System.out.println("Closing system...");
                     break;
 
@@ -144,6 +194,13 @@ public class Console {
     private void registerVehicleEntry() {
         System.out.print("Enter plate: ");
         String plate = scanner.next();
+        if (!plate.matches("[A-Za-z]{3}[0-9]{3}")) {
+            System.out.println(
+                "Invalid plate format. Use 3 letters followed by 3 numbers (ABC123)."
+            );
+            return;
+        }
+        plate = plate.toUpperCase();
         if (parkingLot.findVehicle(plate) != null) {
             System.out.println("Vehicle already registered.");
             return;
@@ -273,31 +330,20 @@ public class Console {
 
         System.out.println("\n===== AVAILABLE SPOTS =====");
 
-        for (ParkingSpot spot : parkingLot.getParkingSpots()) {
-
-            if (!spot.isOccupied()) {
-
-                System.out.println("---------------------");
-                System.out.println("Spot Number: " + spot.getSpotNumber());
-                System.out.println("Floor: " + spot.getFloor());
-
-                if (spot.isDisabledSpot()) {
-                    System.out.println("Type: Disabled");
-                } else if (spot.isHighDisplacementSpot()) {
-                    System.out.println("Type: High Displacement Motorcycle");
-                } else if (spot.isMotorcycleSpot()) {
-                    System.out.println("Type: Motorcycle");
-                } else {
-                    System.out.println("Type: Regular Car");
-                }
-            }
+        for (ParkingFloor floor : parkingLot.getFloors()) {
+            floor.showAvailableMatrix();
         }
 
-        System.out.println("---------------------");
-        System.out.println("Total Available Spots: " +
-                parkingLot.getAvailableSpots());
-    }
+        System.out.println("\n========== LEGEND ==========");
+        System.out.println("AVC = Available Car Spot");
+        System.out.println("AVD = Available Disabled Spot");
+        System.out.println("AVM = Available Motorcycle Spot");
+        System.out.println("AVH = Available High Displacement Spot");
+        System.out.println("--- = Occupied Spot");
 
+        System.out.println("\nTotal Available Spots: "
+                + parkingLot.getAvailableSpots());
+    }
     private void generateReport() {
 
         Report report = parkingLot.generateReport();
@@ -338,7 +384,7 @@ public class Console {
                 highestTicket.getFee()
             );
         }
-        dataManager.saveData();
+        dataManager.saveData(parkingLot);
     }
     private void searchVehicle() {
 
@@ -410,7 +456,7 @@ public class Console {
     }
     private void showVehiclesByFloor() {
 
-        System.out.print("Enter floor (1-3): ");
+        System.out.print("Enter floor (1-5): ");
         int floor = scanner.nextInt();
 
         System.out.println("===== FLOOR " + floor + " =====");
@@ -441,27 +487,13 @@ public class Console {
 
         System.out.println("\n===== OCCUPIED SPOTS =====");
 
-        for (ParkingSpot spot : parkingLot.getParkingSpots()) {
-
-            if (spot.isOccupied()) {
-
-                System.out.println("---------------------");
-                System.out.println("Spot Number: " + spot.getSpotNumber());
-                System.out.println("Floor: " + spot.getFloor());
-                System.out.println("Vehicle: " +
-                        spot.getCurrentVehicle().getPlate());
-
-                if (spot.getCurrentVehicle() instanceof Car) {
-                    System.out.println("Type: Car");
-                } else {
-                    System.out.println("Type: Motorcycle");
-                }
-            }
+        for (ParkingFloor floor : parkingLot.getFloors()) {
+            floor.showOccupiedMatrix();
         }
 
-        System.out.println("---------------------");
-        System.out.println("Total Occupied Spots: "
-                + parkingLot.getOccupiedSpots());
+        System.out.println("\n========== LEGEND ==========");
+        System.out.println("C = Car");
+        System.out.println("M = Motorcycle");
     }
     private void searchEmployee() {
 
@@ -686,6 +718,33 @@ public class Console {
                     + employee.getTicketsProcessed());
             System.out.println("Revenue: $"
                     + employee.getRevenueGenerated());
+        }
+    }
+    private void modifyVehicle() {
+
+        System.out.print("Enter plate: ");
+        String plate = scanner.next();
+
+        System.out.print("Enter new brand: ");
+        String newBrand = scanner.next();
+
+        if (parkingLot.updateVehicleBrand(plate, newBrand)) {
+            System.out.println("Vehicle updated successfully.");
+        } else {
+            System.out.println("Vehicle not found.");
+        }
+    }
+    private void deleteVehicle() {
+
+        System.out.print("Enter plate: ");
+        String plate = scanner.next();
+
+        if (parkingLot.removeVehicle(plate)) {
+            System.out.println("Vehicle deleted successfully.");
+        } else {
+            System.out.println(
+                "Vehicle not found or is currently parked."
+            );
         }
     }
 }   

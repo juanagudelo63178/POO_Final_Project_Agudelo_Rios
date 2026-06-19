@@ -1,11 +1,12 @@
 package domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Represents a motorcycle.
  */
-public class Motorcycle extends Vehicle {
+public class Motorcycle extends Vehicle implements Serializable {
 
     private boolean highDisplacement;
     private double HOURLY_RATE = 1.0;//constante.

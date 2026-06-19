@@ -1,25 +1,42 @@
 package data;
 
-import java.time.LocalDateTime;
+import domain.ParkingLot;
+import java.io.*;
 
 public class DataManager {
 
-    private int saveCount;
+    private static final String FILE_NAME = "parking.dat";
 
-    public DataManager() {
-        saveCount = 0;
+    public void saveData(ParkingLot parkingLot) {
+
+        try (
+            ObjectOutputStream out =
+                new ObjectOutputStream(
+                    new FileOutputStream(FILE_NAME))
+        ) {
+
+            out.writeObject(parkingLot);
+            System.out.println("Data saved successfully.");
+
+        } catch (IOException e) {
+
+            System.out.println("Error saving data.");
+        }
     }
 
-    public void saveData() {
-        saveCount++;
+    public ParkingLot loadData() {
 
-        System.out.println(
-            "Data saved successfully at: "
-            + LocalDateTime.now()
-        );
+        try (
+            ObjectInputStream in =
+                new ObjectInputStream(
+                    new FileInputStream(FILE_NAME))
+        ) {
 
-        System.out.println(
-            "Total saves: " + saveCount
-        );
+            return (ParkingLot) in.readObject();
+
+        } catch (Exception e) {
+
+            return null;
+        }
     }
 }

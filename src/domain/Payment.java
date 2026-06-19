@@ -1,9 +1,11 @@
 package domain;
 
+import java.io.Serializable;
+
 /**
  * Represents a payment.
  */
-public class Payment {
+public class Payment implements Serializable {
 
     private double amount;
     private String method;

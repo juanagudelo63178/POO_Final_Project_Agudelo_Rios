@@ -1,6 +1,8 @@
 package domain;
 
-public class ParkingAI {
+import java.io.Serializable;
+
+public class ParkingAI implements Serializable {
 
     public String generateAnalysis(ParkingLot parkingLot) {
 

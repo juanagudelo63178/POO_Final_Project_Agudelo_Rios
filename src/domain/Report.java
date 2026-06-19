@@ -1,11 +1,12 @@
 package domain;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 /**
  * Represents a parking lot report.
  */
-public class Report {
+public class Report implements Serializable {
 
     private int totalVehicles;
     private double totalRevenue;

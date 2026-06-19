@@ -1,11 +1,12 @@
 package domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Represents a vehicle entering the parking lot.
  */
-public abstract class Vehicle {
+public abstract class Vehicle implements Serializable {
 
     private String plate;
     private String brand;
@@ -37,5 +38,7 @@ public abstract class Vehicle {
     public VehicleType getType() {
         return type;
     }   
-
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 }

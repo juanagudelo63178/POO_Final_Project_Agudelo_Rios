@@ -1,9 +1,11 @@
 package domain;
 
+import java.io.Serializable;
+
 /**
  * Represents a parking space.
  */
-public class ParkingSpot {
+public class ParkingSpot implements Serializable {
 
     private int spotNumber;
     private boolean occupied;

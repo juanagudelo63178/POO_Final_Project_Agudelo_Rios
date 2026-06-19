@@ -1,11 +1,11 @@
 package domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-
 /**
  * Represents a car.
  */
-public class Car extends Vehicle {
+public class Car extends Vehicle implements Serializable {
 
     private boolean disabledVehicle;
 

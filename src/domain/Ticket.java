@@ -1,5 +1,6 @@
 package domain;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
  */
 
 //mejorar la logica de solo registrar una vez el vehiculo.
-public class Ticket {
+public class Ticket implements Serializable {
 
     private String id;
     private LocalDateTime entryTime;

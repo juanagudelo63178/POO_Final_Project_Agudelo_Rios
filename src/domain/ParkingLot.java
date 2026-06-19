@@ -1,17 +1,19 @@
 package domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
  * Represents the parking lot management system.
  */
-public class ParkingLot {
+public class ParkingLot implements Serializable {
 
     private ArrayList<Vehicle> vehicles;
     private ArrayList<Ticket> tickets;
     private ArrayList<ParkingSpot> parkingSpots;
     private ArrayList<Employee> employees;
+    private ArrayList<ParkingFloor> floors;
     private int totalVehiclesRegistered;
 
     public ParkingLot() {
@@ -20,6 +22,9 @@ public class ParkingLot {
         parkingSpots = new ArrayList<>();
         employees = new ArrayList<>();
         totalVehiclesRegistered = 0;
+        floors = new ArrayList<>();
+
+        
     }
 
     public void registerEntry(Ticket ticket) {
@@ -29,9 +34,10 @@ public class ParkingLot {
     }
 
     public void addParkingSpot(ParkingSpot parkingSpot) {
-    parkingSpots.add(parkingSpot);
-    }
 
+        parkingSpots.add(parkingSpot);
+
+    }
     public void addEmployee(Employee employee) {
     employees.add(employee);
     }
@@ -292,5 +298,41 @@ public class ParkingLot {
         }
 
         return vehiclesOnFloor;
+    }
+    public void addFloor(ParkingFloor floor) {
+        floors.add(floor);
+    }
+
+    public ArrayList<ParkingFloor> getFloors() {
+        return floors;
+    }
+    public boolean updateVehicleBrand(String plate, String newBrand) {
+
+        Vehicle vehicle = findVehicle(plate);
+
+        if (vehicle != null) {
+            vehicle.setBrand(newBrand);
+            return true;
+        }
+
+        return false;
+    }
+    public boolean removeVehicle(String plate) {
+
+        Vehicle vehicle = findVehicle(plate);
+
+        if (vehicle != null) {
+
+            ParkingSpot spot = findVehicleSpot(plate);
+
+            if (spot != null) {
+                return false; // cannot delete parked vehicle
+            }
+
+            vehicles.remove(vehicle);
+            return true;
+        }
+
+        return false;
     }
 }
