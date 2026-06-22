@@ -83,7 +83,7 @@ public class Console {
             }
 
             parkingLot.addEmployee(
-                    new Employee("EMP001", "Juan")
+                    new Employee("1", "Juan")
             );
         }
        
@@ -106,7 +106,7 @@ public class Console {
             System.out.println("7. Show Vehicles By Floor");
             System.out.println("8. Show Occupied Spots");
             System.out.println("9. Show Employees");
-            System.out.println("10. Predict Occupancy");
+            System.out.println("10. Analitic AI");
             System.out.println("11. Search Ticket");
             System.out.println("12. Show All Tickets");
             System.out.println("13. Search Parking Spot");
@@ -115,6 +115,9 @@ public class Console {
             System.out.println("16. Employee Ranking");
             System.out.println("17. Modify Vehicle");
             System.out.println("18. Delete Vehicle");
+            System.out.println("19. Register Employee");
+            System.out.println("20. Fire Employee");
+            System.out.println("21 Show All Employees");
 
             System.out.println("0. Exit");
 
@@ -154,7 +157,7 @@ public class Console {
                     searchEmployee();
                     break;
                 case 10:
-                    predictOccupancy();
+                    parkingAIMenu();
                     break;
                 case 11:
                     searchTicket();
@@ -179,6 +182,17 @@ public class Console {
                     break;
                 case 18:
                     deleteVehicle();
+                    break;
+                case 19:
+                    registerEmployee();
+                    break;
+
+                case 20:
+                    fireEmployee();
+                    break;
+
+                case 21:
+                    showEmployees();
                     break;
                 case 0:
                     dataManager.saveData(parkingLot);
@@ -255,7 +269,25 @@ public class Console {
             return;
         }
 
-        Employee employee = parkingLot.getEmployeeById("EMP001");
+        System.out.println("Available Employees:");
+
+        for (Employee employee : parkingLot.getEmployees()) {
+            System.out.println(
+                employee.getId() + " - " +
+                employee.getName()
+            );
+        }
+
+        System.out.print("Select employee ID: ");
+        String employeeId = scanner.next();
+
+        Employee employee =
+                parkingLot.getEmployeeById(employeeId);
+
+        if (employee == null) {
+            System.out.println("Employee not found.");
+            return;
+        }
 
         spot.parkVehicle(vehicle);
         
@@ -524,12 +556,6 @@ public class Console {
             }
         }
     }
-    private void predictOccupancy() {
-
-        ParkingAI ai = new ParkingAI();
-
-        System.out.println(ai.generateAnalysis(parkingLot));
-    }   
     private void searchTicket() {
 
         System.out.print("Enter ticket ID: ");
@@ -677,22 +703,46 @@ public class Console {
     private void showFloorDetails() {
 
         System.out.print("Enter floor: ");
-        int floor = scanner.nextInt();
+        int floorNumber = scanner.nextInt();
 
-        int occupied = parkingLot.getOccupiedSpotsByFloor(floor);
+        ParkingFloor selectedFloor = null;
 
-        System.out.println("\n===== FLOOR " + floor + " =====");
-        System.out.println("Occupied Spots: " + occupied);
+        for (ParkingFloor floor : parkingLot.getFloors()) {
+            if (floor.getFloorNumber() == floorNumber) {
+                selectedFloor = floor;
+                break;
+            }
+        }
 
-        System.out.println("\nVehicles:");
+        if (selectedFloor == null) {
+            System.out.println("Invalid floor.");
+            return;
+        }
 
-        for (Vehicle vehicle : parkingLot.getVehiclesByFloor(floor)) {
+        System.out.println("\n1. Available Spaces Map");
+        System.out.println("2. Occupied Spaces Map");
+        System.out.println("3. Both Maps");
+        System.out.print("Select: ");
 
-            System.out.println("---------------------");
-            System.out.println("Plate: " + vehicle.getPlate());
-            System.out.println("Brand: " + vehicle.getBrand());
-            System.out.println("Type: "
-                    + vehicle.getClass().getSimpleName());
+        int option = scanner.nextInt();
+
+        switch (option) {
+
+            case 1:
+                selectedFloor.showAvailableMatrix();
+                break;
+
+            case 2:
+                selectedFloor.showOccupiedMatrix();
+                break;
+
+            case 3:
+                selectedFloor.showAvailableMatrix();
+                selectedFloor.showOccupiedMatrix();
+                break;
+
+            default:
+                System.out.println("Invalid option.");
         }
     }
     private void showEmployeeRanking() {
@@ -745,6 +795,118 @@ public class Console {
             System.out.println(
                 "Vehicle not found or is currently parked."
             );
+        }
+    }
+    private void parkingAIMenu() {
+
+        System.out.println("\n===== PARKING AI =====");
+
+        System.out.println("1. What is the busiest hour?");
+        System.out.println("2. What is the least busy hour?");
+        System.out.println("3. What type of vehicle visits the parking lot the most?");
+        System.out.println("4. Have we ever run out of disabled parking spaces?");
+        System.out.println("5. Have we ever run out of high-displacement motorcycle spaces?");
+        System.out.println("6. Which employee deserves a promotion?");
+        System.out.println("7. Which employee may require performance improvement?");
+        System.out.println("8. Which vehicle deserves a loyalty discount?");
+        System.out.println("9. What is the busiest day in our records?");
+        System.out.println("10. What is the estimated revenue for tomorrow?");
+
+        System.out.print("Select: ");
+        int option = scanner.nextInt();
+
+        ParkingAI ai = new ParkingAI();
+
+        switch (option) {
+
+            case 1:
+                System.out.println(ai.getBusiestHour(parkingLot));
+                break;
+
+            case 2:
+                System.out.println(ai.getLeastBusyHour(parkingLot));
+                break;
+
+            case 3:
+                System.out.println(ai.getMostCommonVehicleType(parkingLot));
+                break;
+
+            case 4:
+                System.out.println(ai.analyzeDisabledSpaces(parkingLot));
+                break;
+
+            case 5:
+                System.out.println(ai.analyzeHighDisplacementSpaces(parkingLot));
+                break;
+
+            case 6:
+                System.out.println(ai.recommendPromotion(parkingLot));
+                break;
+
+            case 7:
+                System.out.println(ai.recommendPerformanceImprovement(parkingLot));
+                break;
+
+            case 8:
+                System.out.println(ai.recommendLoyaltyDiscount(parkingLot));
+                break;
+
+            case 9:
+                System.out.println(ai.getBusiestDay(parkingLot));
+                break;
+
+            case 10:
+                System.out.println(ai.predictTomorrowRevenue(parkingLot));
+                break;
+
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
+    private void registerEmployee() {
+
+        System.out.print("Employee ID: ");
+        String id = scanner.next();
+
+        if (parkingLot.getEmployeeById(id) != null) {
+            System.out.println("Employee already exists.");
+            return;
+        }
+
+        System.out.print("Employee Name: ");
+        String name = scanner.next();
+
+        parkingLot.addEmployee(new Employee(id, name));
+
+        System.out.println("Employee registered successfully.");
+    }
+    private void fireEmployee() {
+
+        System.out.print("Employee ID: ");
+        String id = scanner.next();
+
+        if (parkingLot.removeEmployee(id)) {
+
+            System.out.println("Employee removed successfully.");
+
+        } else {
+
+            System.out.println("Employee could not be removed.");
+        }
+    }
+    private void showEmployees() {
+
+        System.out.println("\n===== EMPLOYEES =====");
+
+        for (Employee employee : parkingLot.getEmployees()) {
+
+            System.out.println("------------------");
+            System.out.println("ID: " + employee.getId());
+            System.out.println("Name: " + employee.getName());
+            System.out.println("Tickets: "
+                    + employee.getTicketsProcessed());
+            System.out.println("Revenue: $"
+                    + employee.getRevenueGenerated());
         }
     }
 }   

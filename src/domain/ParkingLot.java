@@ -16,6 +16,8 @@ public class ParkingLot implements Serializable {
     private ArrayList<Employee> employees;
     private ArrayList<ParkingFloor> floors;
     private int totalVehiclesRegistered;
+    private int disabledRejections;
+    private int highDisplacementRejections;
 
     /**
     * Creates a parking lot and initializes its main components and parking floors.
@@ -28,8 +30,8 @@ public class ParkingLot implements Serializable {
         employees = new ArrayList<>();
         totalVehiclesRegistered = 0;
         floors = new ArrayList<>();
-
-        
+        disabledRejections = 0;
+        highDisplacementRejections = 0;
     }
     
     /**
@@ -154,38 +156,75 @@ public class ParkingLot implements Serializable {
 
     public ParkingSpot getAvailableSpotForVehicle(Vehicle vehicle) {
 
-        for (ParkingSpot spot : parkingSpots) {
+        if (vehicle instanceof Car) {
 
-            if (spot.isOccupied()) {
-                continue;
-            }
+            Car car = (Car) vehicle;
 
-            if (vehicle instanceof Car) {
+            // Buscar puesto para discapacitados
+            if (car.isDisabledVehicle()) {
 
-                Car car = (Car) vehicle;
+                for (ParkingSpot spot : parkingSpots) {
 
-                if (car.isDisabledVehicle() && spot.isDisabledSpot()) {
-                    return spot;
-                }
-            }
+                    if (!spot.isOccupied()
+                            && spot.isDisabledSpot()) {
 
-            if (vehicle instanceof Motorcycle) {
-
-                Motorcycle motorcycle = (Motorcycle) vehicle;
-
-                if (motorcycle.isHighDisplacement()
-                        && spot.isHighDisplacementSpot()) {
-                    return spot;
+                        return spot;
+                    }
                 }
 
-                if (!motorcycle.isHighDisplacement()
-                        && spot.isMotorcycleSpot()) {
-                    return spot;
-                }
+                System.out.println(
+                    "No disabled spots available. Assigning regular car spot."
+                );
+                registerDisabledRejection();
             }
+
+            // Buscar puesto normal de carro
+            ParkingSpot regularCarSpot = getAvailableCarSpot();
+
+            if (regularCarSpot != null) {
+                return regularCarSpot;
+            }
+
+            System.out.println("No car parking spaces available.");
+            return null;
         }
 
-        return getAvailableSpot();
+        if (vehicle instanceof Motorcycle) {
+
+            Motorcycle motorcycle = (Motorcycle) vehicle;
+
+            // Buscar puesto de alto cilindraje
+            if (motorcycle.isHighDisplacement()) {
+
+                for (ParkingSpot spot : parkingSpots) {
+
+                    if (!spot.isOccupied()
+                            && spot.isHighDisplacementSpot()) {
+
+                        return spot;
+                    }
+                }
+
+                System.out.println(
+                    "No high displacement spots available. Assigning regular motorcycle spot."
+                );
+                registerHighDisplacementRejection();
+            }
+
+            // Buscar puesto normal de moto
+            ParkingSpot regularMotorcycleSpot =
+                    getAvailableMotorcycleSpot();
+
+            if (regularMotorcycleSpot != null) {
+                return regularMotorcycleSpot;
+            }
+
+
+            System.out.println("No motorcycle parking spaces available.");
+            return null;
+        }
+
+        return null;
     }
 
     /**
@@ -424,6 +463,90 @@ public class ParkingLot implements Serializable {
 
             vehicles.remove(vehicle);
             return true;
+        }
+
+        return false;
+    }
+    public int getDisabledRejections() {
+        return disabledRejections;
+    }
+
+    public int getHighDisplacementRejections() {
+        return highDisplacementRejections;
+    }
+    public void registerDisabledRejection() {
+        disabledRejections++;
+    }
+
+    public void registerHighDisplacementRejection() {
+        highDisplacementRejections++;
+    }
+    public boolean removeEmployee(String id) {
+
+        if (employees.size() <= 1) {
+
+            System.out.println(
+                "Cannot remove the last employee."
+            );
+
+            return false;
+        }
+
+        if (employeeHasTickets(id)) {
+
+            System.out.println(
+                "This employee cannot be removed because they have associated tickets."
+            );
+
+            return false;
+        }
+
+        Employee employee = getEmployeeById(id);
+
+        if (employee != null) {
+
+            employees.remove(employee);
+            return true;
+        }
+
+        return false;
+    }
+    public ParkingSpot getAvailableCarSpot() {
+
+        for (ParkingSpot spot : parkingSpots) {
+
+            if (!spot.isOccupied()
+                    && !spot.isMotorcycleSpot()
+                    && !spot.isDisabledSpot()
+                    && !spot.isHighDisplacementSpot()) {
+
+                return spot;
+            }
+        }
+
+        return null;
+    }
+    public ParkingSpot getAvailableMotorcycleSpot() {
+
+        for (ParkingSpot spot : parkingSpots) {
+
+            if (!spot.isOccupied()
+                    && spot.isMotorcycleSpot()
+                    && !spot.isHighDisplacementSpot()) {
+
+                return spot;
+            }
+        }
+
+        return null;
+    }
+    public boolean employeeHasTickets(String employeeId) {
+
+        for (Ticket ticket : tickets) {
+
+            if (ticket.getEmployee().getId().equalsIgnoreCase(employeeId)) {
+                return true;
+            }
         }
 
         return false;

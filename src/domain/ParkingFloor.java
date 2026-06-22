@@ -140,6 +140,7 @@ public class ParkingFloor implements Serializable {
 
         for (int row = 0; row < 5; row++) {
 
+            
             for (int col = 0; col < 5; col++) {
 
                 ParkingSpot spot = spotMatrix[row][col];
@@ -158,6 +159,14 @@ public class ParkingFloor implements Serializable {
             }
 
             System.out.println();
+
+            
+            for (int col = 0; col < 5; col++) {
+                ParkingSpot spot = spotMatrix[row][col];
+                System.out.printf(" %-4d", spot.getSpotNumber());
+            }
+
+            System.out.println("\n");
         }
 
         System.out.println("\nAvailable spots on floor: "
@@ -205,8 +214,15 @@ public class ParkingFloor implements Serializable {
             }
 
             System.out.println();
+
+            for (int col = 0; col < 5; col++) {
+                ParkingSpot spot = spotMatrix[row][col];
+                System.out.printf(" %-7d", spot.getSpotNumber());
+            }
+
+            System.out.println("\n");
         }
-    }
+    }   
     
 }
 

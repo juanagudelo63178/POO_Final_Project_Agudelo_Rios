@@ -8,34 +8,74 @@ import java.io.Serializable;
 
 public class ParkingAI implements Serializable {
 
-    /**
-    * Generates an analysis of the parking lot based on its current status and statistics.
-    */
+    public String getBusiestHour(ParkingLot parkingLot) {
 
-    public String generateAnalysis(ParkingLot parkingLot) {
-
-            double occupancy = parkingLot.predictOccupancy();
+            if (parkingLot.getTickets().isEmpty()) {
+                return "No ticket data available.";
+            }
 
             int[] hours = new int[24];
 
             for (Ticket ticket : parkingLot.getTickets()) {
-
                 int hour = ticket.getEntryTime().getHour();
-
                 hours[hour]++;
             }
 
-            int peakHour = 0;
+            int busiestHour = 0;
 
-            for (int i = 1; i < hours.length; i++) {
-
-                if (hours[i] > hours[peakHour]) {
-                    peakHour = i;
+            for (int i = 1; i < 24; i++) {
+                if (hours[i] > hours[busiestHour]) {
+                    busiestHour = i;
                 }
             }
 
-            int cars = 0;
-            int motorcycles = 0;
+            return "The busiest hour is "
+                    + busiestHour
+                    + ":00 with "
+                    + hours[busiestHour]
+                    + " vehicle entries.";
+        }
+    public String getLeastBusyHour(ParkingLot parkingLot) {
+
+        if (parkingLot.getTickets().isEmpty()) {
+            return "No ticket data available.";
+        }
+
+        int[] hours = new int[24];
+
+        for (Ticket ticket : parkingLot.getTickets()) {
+            int hour = ticket.getEntryTime().getHour();
+            hours[hour]++;
+        }
+
+        int leastBusyHour = -1;
+
+        for (int i = 0; i < 24; i++) {
+
+            if (hours[i] > 0) {
+
+                if (leastBusyHour == -1 ||
+                        hours[i] < hours[leastBusyHour]) {
+
+                    leastBusyHour = i;
+                }
+            }
+        }
+
+        return "The least busy hour is "
+                + leastBusyHour
+                + ":00 with "
+                + hours[leastBusyHour]
+                + " vehicle entries.";
+    }
+    public String getMostCommonVehicleType(ParkingLot parkingLot) {
+
+        if (parkingLot.getTickets().isEmpty()) {
+            return "No ticket data available.";
+        }
+
+        int cars = 0;
+        int motorcycles = 0;
 
         for (Ticket ticket : parkingLot.getTickets()) {
 
@@ -46,143 +86,230 @@ public class ParkingAI implements Serializable {
             }
         }
 
-        String mostCommonVehicle;
-
         if (cars > motorcycles) {
-            mostCommonVehicle = "Car";
+
+            double percentage =
+                    (cars * 100.0) / (cars + motorcycles);
+
+            return "Cars are the most common vehicle type with "
+                    + String.format("%.2f", percentage)
+                    + "% of all visits.";
+
         } else if (motorcycles > cars) {
-            mostCommonVehicle = "Motorcycle";
+
+            double percentage =
+                    (motorcycles * 100.0) / (cars + motorcycles);
+
+            return "Motorcycles are the most common vehicle type with "
+                    + String.format("%.2f", percentage)
+                    + "% of all visits.";
+
         } else {
-        mostCommonVehicle = "Tie";
+
+            return "Cars and motorcycles have the same number of visits.";
+        }
+    }
+    public String recommendPromotion(ParkingLot parkingLot) {
+
+        if (parkingLot.getEmployees().isEmpty()) {
+            return "No employee data available.";
         }
 
-        Employee mostActiveEmployee = null;
+        Employee bestEmployee = null;
+
         int maxTickets = -1;
+        double maxRevenue = -1;
 
         for (Employee employee : parkingLot.getEmployees()) {
 
             if (employee.getTicketsProcessed() > maxTickets) {
 
                 maxTickets = employee.getTicketsProcessed();
-                mostActiveEmployee = employee;
+                maxRevenue = employee.getRevenueGenerated();
+                bestEmployee = employee;
+
+            } else if (employee.getTicketsProcessed() == maxTickets
+                    && employee.getRevenueGenerated() > maxRevenue) {
+
+                maxRevenue = employee.getRevenueGenerated();
+                bestEmployee = employee;
             }
         }
 
-        String activeEmployeeName;
+        return "Based on current performance, "
+                + bestEmployee.getName()
+                + " deserves consideration for a promotion. "
+                + "This employee processed "
+                + bestEmployee.getTicketsProcessed()
+                + " tickets and generated $"
+                + String.format("%.2f",
+                        bestEmployee.getRevenueGenerated())
+                + " in revenue.";
+    }
+    public String recommendPerformanceImprovement(ParkingLot parkingLot) {
 
-        if (mostActiveEmployee != null) {
-            activeEmployeeName = mostActiveEmployee.getName();
-        } else {
-            activeEmployeeName = "No employees";
+        if (parkingLot.getEmployees().isEmpty()) {
+            return "No employee data available.";
         }
 
-        Employee highestRevenueEmployee = null;
-        double maxRevenue = -1;
+        Employee employeeToImprove = null;
+
+        int minTickets = Integer.MAX_VALUE;
+        double minRevenue = Double.MAX_VALUE;
 
         for (Employee employee : parkingLot.getEmployees()) {
 
-            if (employee.getRevenueGenerated() > maxRevenue) {
+            if (employee.getTicketsProcessed() < minTickets) {
 
-                maxRevenue = employee.getRevenueGenerated();
-                highestRevenueEmployee = employee;
+                minTickets = employee.getTicketsProcessed();
+                minRevenue = employee.getRevenueGenerated();
+                employeeToImprove = employee;
+
+            } else if (employee.getTicketsProcessed() == minTickets
+                    && employee.getRevenueGenerated() < minRevenue) {
+
+                minRevenue = employee.getRevenueGenerated();
+                employeeToImprove = employee;
             }
         }
 
-        String revenueEmployeeName;
+        return "Based on current performance, "
+                + employeeToImprove.getName()
+                + " may require additional training or performance improvement. "
+                + "This employee processed "
+                + employeeToImprove.getTicketsProcessed()
+                + " tickets and generated $"
+                + String.format("%.2f",
+                        employeeToImprove.getRevenueGenerated())
+                + " in revenue.";
+    }
+    public String recommendLoyaltyDiscount(ParkingLot parkingLot) {
 
-        if (highestRevenueEmployee != null) {
-            revenueEmployeeName = highestRevenueEmployee.getName();
-        } else {
-            revenueEmployeeName = "No employees";
+        if (parkingLot.getTickets().isEmpty()) {
+            return "No ticket data available.";
         }
 
-        Vehicle topVehicle = null;
-        double highestFee = -1;
+        java.util.HashMap<String, Integer> visits =
+                new java.util.HashMap<>();
 
         for (Ticket ticket : parkingLot.getTickets()) {
 
-            if (ticket.getFee() > highestFee) {
+            String plate = ticket.getVehicle().getPlate();
 
-                highestFee = ticket.getFee();
-                topVehicle = ticket.getVehicle();
+            if (visits.containsKey(plate)) {
+                visits.put(plate, visits.get(plate) + 1);
+            } else {
+                visits.put(plate, 1);
             }
         }
 
-        String topVehiclePlate;
+        String bestCustomer = null;
+        int maxVisits = 0;
 
-        if (topVehicle != null) {
-            topVehiclePlate = topVehicle.getPlate();
-        } else {
-            topVehiclePlate = "No vehicles";
+        for (String plate : visits.keySet()) {
+
+            if (visits.get(plate) > maxVisits) {
+
+                maxVisits = visits.get(plate);
+                bestCustomer = plate;
+            }
         }
 
-            int[] floorUsage = new int[6]; // pisos 1 a 5
+        return "Vehicle "
+                + bestCustomer
+                + " deserves a loyalty discount. "
+                + "It has visited the parking lot "
+                + maxVisits
+                + " times, making it the most frequent customer.";
+    }
+    public String analyzeDisabledSpaces(ParkingLot parkingLot) {
+
+        int rejections = parkingLot.getDisabledRejections();
+
+        if (rejections == 0) {
+            return "Disabled parking demand has always been satisfied.";
+        }
+
+        return "Disabled parking demand exceeded capacity "
+                + rejections
+                + " times.";
+    }
+    public String analyzeHighDisplacementSpaces(ParkingLot parkingLot) {
+
+        int rejections =
+                parkingLot.getHighDisplacementRejections();
+
+        if (rejections == 0) {
+            return "High-displacement motorcycle demand has always been satisfied.";
+        }
+
+        return "High-displacement motorcycle demand exceeded capacity "
+                + rejections
+                + " times.";
+    }
+    public String getBusiestDay(ParkingLot parkingLot) {
+
+        if (parkingLot.getTickets().isEmpty()) {
+            return "No ticket data available.";
+        }
+
+        int[] days = new int[7];
 
         for (Ticket ticket : parkingLot.getTickets()) {
 
-            int floor = ticket.getParkingSpot().getFloor();
+            int day =
+                    ticket.getEntryTime()
+                    .getDayOfWeek()
+                    .getValue() - 1;
 
-            if (floor >= 1 && floor <= 5) {
-                floorUsage[floor]++;
+            days[day]++;
+        }
+
+        int busiestDay = 0;
+
+        for (int i = 1; i < days.length; i++) {
+
+            if (days[i] > days[busiestDay]) {
+                busiestDay = i;
             }
         }
 
-        int mostUsedFloor = 1;
+        String[] dayNames = {
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+        };
 
-        for (int i = 2; i <= 5; i++) {
+        return "The busiest day is "
+                + dayNames[busiestDay]
+                + " with "
+                + days[busiestDay]
+                + " vehicle entries.";
+    }
+    public String predictTomorrowRevenue(ParkingLot parkingLot) {
 
-                if (floorUsage[i] > floorUsage[mostUsedFloor]) {
-            mostUsedFloor = i;
-            }
+        if (parkingLot.getTickets().isEmpty()) {
+            return "Not enough data to predict revenue.";
         }
 
-        String recommendation = "";
+        double totalRevenue = 0;
 
-        if (occupancy >= 80) {
-
-            recommendation +=
-                "Increase parking capacity or speed up exits. ";
-
+        for (Ticket ticket : parkingLot.getTickets()) {
+            totalRevenue += ticket.getFee();
         }
 
-        if (peakHour >= 12 && peakHour <= 16) {
+        double averageRevenue =
+                totalRevenue / parkingLot.getTickets().size();
 
-            recommendation +=
-                "Increase staffing during afternoon peak hours. ";
+        double estimatedRevenue =
+                averageRevenue * parkingLot.getVehicles().size();
 
-        }
-
-        if (mostUsedFloor == 1 || mostUsedFloor == 5) {
-
-            recommendation +=
-                "Monitor motorcycle floors due to high demand. ";
-
-        } else {
-
-            recommendation +=
-                "Monitor car floors due to high demand. ";
-
-        }
-
-        if (recommendation.isEmpty()) {
-
-            recommendation =
-                "Parking operation is stable.";
-        }
-
-            String analysis =
-            "===== AI ANALYSIS =====\n" +
-            "Current Occupancy: " +
-            String.format("%.2f", occupancy) +
-            "%\n" +
-            "Peak Hour: " + peakHour + ":00\n"+
-            "Most Common Vehicle: " + mostCommonVehicle + "\n" +
-            "Most Active Employee: " + activeEmployeeName + "\n"+
-            "Highest Revenue Employee: " + revenueEmployeeName + "\n" +
-            "Top Revenue Vehicle: " + topVehiclePlate + "\n"+
-            "Most Used Floor: " + mostUsedFloor + "\n"+
-            "Recommendation: " + recommendation + "\n";
-            
-            return analysis;
+        return "Estimated revenue for tomorrow is $"
+                + String.format("%.2f", estimatedRevenue)
+                + " based on historical averages.";
     }
 }
