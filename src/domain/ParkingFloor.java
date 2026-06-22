@@ -3,12 +3,20 @@ package domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+* Represents a floor within the parking lot and manages its parking spaces.
+*/
+
 public class ParkingFloor implements Serializable {
 
     private int floorNumber;
     private ArrayList<ParkingSpot> spots;
     private ParkingSpot[][] spotMatrix;
 
+    /**
+    * Creates a parking floor and initializes its parking spaces.
+    */
+    
     public ParkingFloor(int floorNumber) {
 
         this.floorNumber = floorNumber;
@@ -17,17 +25,34 @@ public class ParkingFloor implements Serializable {
         this.spotMatrix = new ParkingSpot[5][5];
     }
 
+    /**
+    * Returns the number that identifies the parking floor.
+    */
+    
     public int getFloorNumber() {
         return floorNumber;
     }
+
+    /**
+    * Returns the list of parking spaces available on this floor.
+    */
 
     public ArrayList<ParkingSpot> getSpots() {
         return spots;
     }
 
+    /**
+    * Adds a parking space to this floor.
+    */
+
     public void addSpot(ParkingSpot spot) {
         spots.add(spot);
     }
+
+    /**
+    * Returns the total number of occupied parking spaces on this floor.
+    */
+
     public int getOccupiedSpots() {
 
         int occupied = 0;
@@ -40,6 +65,11 @@ public class ParkingFloor implements Serializable {
 
         return occupied;
     }
+
+    /**
+    * Returns the total number of available parking spaces on this floor.
+    */
+
     public int getAvailableSpots() {
 
         int count = 0;
@@ -55,12 +85,27 @@ public class ParkingFloor implements Serializable {
 
         return count;
     }
+
+    /**
+    * Returns the matrix that represents the parking spaces on this floor.
+    */
+
     public ParkingSpot[][] getSpotMatrix() {
         return spotMatrix;
     }
+
+    /**
+    * Assigns a parking space to a specific position in the floor matrix.
+    */
+
     public void setSpot(int row, int column, ParkingSpot spot) {
         spotMatrix[row][column] = spot;
     }
+
+    /**
+    * Initializes the parking space matrix for this floor.
+    */
+
     public void initializeMatrix() {
 
         int index = 0;
@@ -76,7 +121,12 @@ public class ParkingFloor implements Serializable {
             }
         }
     }
-   public void showAvailableMatrix() {
+
+    /**
+    * Displays a visual representation of the available parking spaces on this floor.
+    */
+
+    public void showAvailableMatrix() {
 
         System.out.println("\n================================");
 
@@ -113,6 +163,11 @@ public class ParkingFloor implements Serializable {
         System.out.println("\nAvailable spots on floor: "
                 + getAvailableSpots());
     }
+
+    /**
+    * Displays a visual representation of the occupied parking spaces on this floor.
+    */
+
     public void showOccupiedMatrix() {
 
         System.out.println("\n================================");

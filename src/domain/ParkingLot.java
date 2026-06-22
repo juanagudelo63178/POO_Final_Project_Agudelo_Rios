@@ -5,8 +5,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
- * Represents the parking lot management system.
- */
+* Represents the parking lot management system.
+*/
+
 public class ParkingLot implements Serializable {
 
     private ArrayList<Vehicle> vehicles;
@@ -15,6 +16,10 @@ public class ParkingLot implements Serializable {
     private ArrayList<Employee> employees;
     private ArrayList<ParkingFloor> floors;
     private int totalVehiclesRegistered;
+
+    /**
+    * Creates a parking lot and initializes its main components and parking floors.
+    */
 
     public ParkingLot() {
         vehicles = new ArrayList<>();
@@ -26,6 +31,10 @@ public class ParkingLot implements Serializable {
 
         
     }
+    
+    /**
+    * Registers the entry of a vehicle into the parking lot using a parking ticket.
+    */
 
     public void registerEntry(Ticket ticket) {
         tickets.add(ticket);
@@ -33,18 +42,35 @@ public class ParkingLot implements Serializable {
         totalVehiclesRegistered++;
     }
 
+    /**
+    * Adds a parking space to the parking lot.
+    */
+
     public void addParkingSpot(ParkingSpot parkingSpot) {
 
         parkingSpots.add(parkingSpot);
 
     }
+
+    /**
+    * Adds an employee to the parking lot staff.
+    */
+
     public void addEmployee(Employee employee) {
     employees.add(employee);
     }
 
+    /**
+    * Adds a vehicle to the parking lot records.
+    */
+    
     public void addVehicle(Vehicle vehicle) {
     vehicles.add(vehicle);
     }
+
+    /**
+    * Processes the exit of a vehicle and records its payment information.
+    */
 
     public boolean registerExit(String plate, String paymentMethod){
 
@@ -75,6 +101,10 @@ public class ParkingLot implements Serializable {
         return false;
     }
 
+    /**
+    * Searches for and returns a vehicle based on its license plate.
+    */
+
     public Vehicle findVehicle(String plate) {
         for(Vehicle vehicle:vehicles){
             if(vehicle.getPlate().equalsIgnoreCase(plate)){
@@ -83,6 +113,10 @@ public class ParkingLot implements Serializable {
         }
         return null;
     }
+
+    /**
+    Returns the total number of available parking spaces in the parking lot.
+    */
 
     public int getAvailableSpots() {
         int available=0;
@@ -93,6 +127,10 @@ public class ParkingLot implements Serializable {
         }
         return available;
     }
+
+    /**
+    * Finds and returns an available parking space in the parking lot.
+    */
 
     public ParkingSpot getAvailableSpot() {
 
@@ -109,6 +147,10 @@ public class ParkingLot implements Serializable {
 
         return null;
     }   
+
+    /**
+    * Finds and returns an available parking space suitable for the specified vehicle.
+    */
 
     public ParkingSpot getAvailableSpotForVehicle(Vehicle vehicle) {
 
@@ -146,9 +188,17 @@ public class ParkingLot implements Serializable {
         return getAvailableSpot();
     }
 
+    /**
+    * Returns the total number of vehicles registered in the parking lot.
+    */
+
     public int getTotalVehiclesRegistered() {
         return totalVehiclesRegistered;
     }
+
+    /**
+    * Generates a report containing information and statistics about the parking lot.
+    */
 
     public Report generateReport() {
         int totalVehicles = vehicles.size();
@@ -160,6 +210,10 @@ public class ParkingLot implements Serializable {
         return new Report(totalVehicles,totalRevenue,tickets.size(),tickets,employees);
     }
 
+    /**
+    * Predicts the future occupancy level of the parking lot based on current data.
+    */
+
     public double predictOccupancy() {
         if(parkingSpots.isEmpty()){
             return 0;
@@ -167,10 +221,18 @@ public class ParkingLot implements Serializable {
         return ((double) getOccupiedSpots() / parkingSpots.size()) * 100;
     }
 
+    /**
+    * Returns the total number of tickets processed in the parking lot.
+    */
+
     public int getTotalTickets() {
         return tickets.size();
     }
     
+    /**
+    * Returns the number of occupied parking spaces on the specified floor.
+    */
+
     public int getOccupiedSpotsByFloor(int floor) {
 
      int occupied = 0;
@@ -185,18 +247,41 @@ public class ParkingLot implements Serializable {
      return occupied;
     }
 
+    /**
+    * Returns the list of vehicles currently registered in the parking lot.
+    */
+
     public ArrayList<Vehicle> getVehicles() {
         return vehicles;
     }
+
+    /**
+    * Returns the list of parking spaces available in the parking lot.
+    */
+
     public ArrayList<ParkingSpot> getParkingSpots() {
         return parkingSpots;
     }
+
+    /**
+    * Returns the list of employees working in the parking lot.
+    */
+
     public ArrayList<Employee> getEmployees() {
         return employees;
     }
+
+    /**
+    * Returns the list of tickets registered in the parking lot.
+    */
+
     public ArrayList<Ticket> getTickets() {
         return tickets;
     }
+
+    /**
+    * Finds and returns the parking space occupied by the vehicle with the specified license plate.
+    */
 
     public ParkingSpot findVehicleSpot(String plate) {
 
@@ -211,6 +296,11 @@ public class ParkingLot implements Serializable {
 
         return null;
     }
+
+    /**
+    * Finds and returns the ticket associated with the specified vehicle license plate.
+    */
+
     public Ticket findTicketByPlate(String plate) {
 
         for (Ticket ticket : tickets) {
@@ -222,6 +312,9 @@ public class ParkingLot implements Serializable {
 
         return null;
     }
+
+
+    
     public Employee getEmployeeById(String id) {
 
         for (Employee employee : employees) {

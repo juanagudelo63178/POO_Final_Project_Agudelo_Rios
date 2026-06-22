@@ -2,7 +2,15 @@ package domain;
 
 import java.io.Serializable;
 
+/**
+* Provides intelligent recommendations and analysis for parking lot operations.
+*/
+
 public class ParkingAI implements Serializable {
+
+    /**
+    * Generates an analysis of the parking lot based on its current status and statistics.
+    */
 
     public String generateAnalysis(ParkingLot parkingLot) {
 
