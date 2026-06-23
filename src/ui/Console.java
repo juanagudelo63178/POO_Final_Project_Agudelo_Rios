@@ -19,8 +19,6 @@ public class Console {
 
     private Scanner scanner;
 
-    private int ticketCounter;
-
     private DataManager dataManager;
     
     /**
@@ -34,7 +32,6 @@ public class Console {
         parkingLot = dataManager.loadData();
 
         scanner = new Scanner(System.in);
-        ticketCounter = 1;
 
         if (parkingLot == null) {
 
@@ -124,7 +121,7 @@ public class Console {
             System.out.println("18. Delete Vehicle");
             System.out.println("19. Register Employee");
             System.out.println("20. Fire Employee");
-            System.out.println("21 Show All Employees");
+            System.out.println("21. Show All Employees");
 
             System.out.println("0. Exit");
 
@@ -238,7 +235,10 @@ public class Console {
         System.out.print("Select: ");
 
         int vehicleType = scanner.nextInt();
-
+        if(vehicleType != 1 && vehicleType != 2){
+            System.out.println("Invalid vehicle type.");
+            return;
+        }
         Vehicle vehicle;
         if(vehicleType == 1) {
 
@@ -302,7 +302,7 @@ public class Console {
 
         spot.parkVehicle(vehicle);
         
-        Ticket ticket = new Ticket("T" + ticketCounter, vehicle, spot, employee);
+        Ticket ticket = new Ticket("T" + parkingLot.getNextTicketNumber(),vehicle,spot,employee);
 
         employee.registerTicket();
         
@@ -310,7 +310,6 @@ public class Console {
 
         System.out.println("Vehicle assigned to spot "+ spot.getSpotNumber()+ " on floor "+ spot.getFloor());
 
-        ticketCounter++;
 
         System.out.println("Vehicle registered successfully.");
 
@@ -512,7 +511,13 @@ public class Console {
                 System.out.println("Type: Motorcycle");
             }
 
-            System.out.println("Entry Time: " + vehicle.getEntryTime());
+            Ticket ticket = parkingLot.findTicketByPlate(vehicle.getPlate());
+
+            if(ticket != null){
+                System.out.println(
+                    "Entry Time: " + ticket.getEntryTime()
+                );
+            }
 
             if (spot != null) {
                 System.out.println("Spot: " + spot.getSpotNumber());

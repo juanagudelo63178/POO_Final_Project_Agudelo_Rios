@@ -13,7 +13,7 @@ public class Car extends Vehicle implements Serializable {
     * Creates a car with its basic information and accessibility status.
     */
     public Car(String plate, String brand,LocalDateTime entryTime,boolean disabledVehicle) {
-        super(plate, brand, entryTime, VehicleType.CAR);
+        super(plate, brand, VehicleType.CAR);
         this.disabledVehicle = disabledVehicle;
     }
 

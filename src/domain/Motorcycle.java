@@ -16,7 +16,7 @@ public class Motorcycle extends Vehicle implements Serializable {
     */
 
     public Motorcycle(String plate, String brand,LocalDateTime entryTime,boolean highDisplacement) {
-        super(plate, brand, entryTime, VehicleType.MOTORCYCLE);
+        super(plate, brand, VehicleType.MOTORCYCLE);
         this.highDisplacement = highDisplacement;
     }
 

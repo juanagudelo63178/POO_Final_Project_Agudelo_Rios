@@ -1,7 +1,6 @@
 package domain;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -74,35 +73,37 @@ public class ParkingLot implements Serializable {
     * Processes the exit of a vehicle and records its payment information.
     */
 
-    public boolean registerExit(String plate, String paymentMethod){
+    public boolean registerExit(String plate, String paymentMethod) {
 
-        for (Ticket ticket : tickets) {
+        Ticket ticket = getActiveTicket(plate);
 
-            if (ticket.getVehicle().getPlate().equalsIgnoreCase(plate) && ticket.getExitTime() == null) {
-
-                ticket.setExitTime(LocalDateTime.now());
-                ticket.calculateFee();
-
-                Payment payment = new Payment(ticket.getFee(), paymentMethod);
-
-                if (!payment.processPayment()) {
-                    System.out.println("Payment failed.");
-                    return false;
-                }
-                System.out.println(payment.generateReceipt());
-
-                ticket.setPayment(payment);
-                ticket.getEmployee().addRevenue(ticket.getFee());
-                ticket.getParkingSpot().removeVehicle();
-                vehicles.remove(ticket.getVehicle());
-
-                return true;
-            }
+        if (ticket == null) {
+            return false;
         }
 
-        return false;
-    }
+        ticket.setExitTime(java.time.LocalDateTime.now());
 
+        ticket.calculateFee();
+
+        Payment payment = new Payment(
+                ticket.getFee(),
+                paymentMethod
+        );
+
+        if (!payment.processPayment()) {
+            return false;
+        }
+
+        ticket.setPayment(payment);
+
+        ticket.getParkingSpot().removeVehicle();
+
+        vehicles.remove(ticket.getVehicle());
+
+        ticket.getEmployee().addRevenue(ticket.getFee());
+
+        return true;
+    }
     /**
     * Searches for and returns a vehicle based on its license plate.
     */
@@ -345,6 +346,22 @@ public class ParkingLot implements Serializable {
         for (Ticket ticket : tickets) {
 
             if (ticket.getVehicle().getPlate().equalsIgnoreCase(plate)) {
+                return ticket;
+            }
+        }
+
+        return null;
+    }
+
+    public Ticket getActiveTicket(String plate) {
+
+        for (Ticket ticket : tickets) {
+
+            if (ticket.getVehicle()
+                    .getPlate()
+                    .equalsIgnoreCase(plate)
+                    && ticket.getExitTime() == null) {
+
                 return ticket;
             }
         }
@@ -633,5 +650,9 @@ public class ParkingLot implements Serializable {
         }
 
         return false;
+    }
+
+    public int getNextTicketNumber() {
+        return tickets.size() + 1;
     }
 }
