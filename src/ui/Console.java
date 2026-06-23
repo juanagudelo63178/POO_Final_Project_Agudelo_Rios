@@ -420,6 +420,10 @@ public class Console {
 
         System.out.println("Floor 3 occupied spots: " + parkingLot.getOccupiedSpotsByFloor(3));
 
+        System.out.println("Floor 4 occupied spots: " + parkingLot.getOccupiedSpotsByFloor(4));
+
+        System.out.println("Floor 5 occupied spots: " + parkingLot.getOccupiedSpotsByFloor(5));
+
         System.out.println("Available spots: " + parkingLot.getAvailableSpots());
 
         System.out.println("Occupied spots: " + parkingLot.getOccupiedSpots());

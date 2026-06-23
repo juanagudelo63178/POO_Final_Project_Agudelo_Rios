@@ -8,6 +8,10 @@ import java.io.Serializable;
 
 public class ParkingAI implements Serializable {
 
+        /**
+     * Returns the hour with the highest vehicle traffic in the parking lot.
+     */
+
     public String getBusiestHour(ParkingLot parkingLot) {
 
             if (parkingLot.getTickets().isEmpty()) {
@@ -34,7 +38,12 @@ public class ParkingAI implements Serializable {
                     + ":00 with "
                     + hours[busiestHour]
                     + " vehicle entries.";
-        }
+    }
+
+        /**
+     * Returns the hour with the lowest vehicle traffic in the parking lot.
+     */
+
     public String getLeastBusyHour(ParkingLot parkingLot) {
 
         if (parkingLot.getTickets().isEmpty()) {
@@ -68,6 +77,11 @@ public class ParkingAI implements Serializable {
                 + hours[leastBusyHour]
                 + " vehicle entries.";
     }
+
+        /**
+     * Returns the most common vehicle type currently registered in the parking lot.
+     */
+
     public String getMostCommonVehicleType(ParkingLot parkingLot) {
 
         if (parkingLot.getTickets().isEmpty()) {
@@ -109,6 +123,12 @@ public class ParkingAI implements Serializable {
             return "Cars and motorcycles have the same number of visits.";
         }
     }
+
+        /**
+     * Recommends a promotion for an employee based on their performance.
+     */
+
+
     public String recommendPromotion(ParkingLot parkingLot) {
 
         if (parkingLot.getEmployees().isEmpty()) {
@@ -146,6 +166,11 @@ public class ParkingAI implements Serializable {
                         bestEmployee.getRevenueGenerated())
                 + " in revenue.";
     }
+
+        /**
+     * Recommends actions to improve employee performance based on parking lot activity and operational data.
+     */
+
     public String recommendPerformanceImprovement(ParkingLot parkingLot) {
 
         if (parkingLot.getEmployees().isEmpty()) {
@@ -183,6 +208,11 @@ public class ParkingAI implements Serializable {
                         employeeToImprove.getRevenueGenerated())
                 + " in revenue.";
     }
+
+    /**
+ * Recommends a loyalty discount strategy for frequent or returning parking lot customers.
+ */
+
     public String recommendLoyaltyDiscount(ParkingLot parkingLot) {
 
         if (parkingLot.getTickets().isEmpty()) {
@@ -222,6 +252,11 @@ public class ParkingAI implements Serializable {
                 + maxVisits
                 + " times, making it the most frequent customer.";
     }
+
+    /**
+ * Analyzes the usage and occupancy of disabled parking spaces in the parking lot.
+ */
+
     public String analyzeDisabledSpaces(ParkingLot parkingLot) {
 
         int rejections = parkingLot.getDisabledRejections();
@@ -234,6 +269,11 @@ public class ParkingAI implements Serializable {
                 + rejections
                 + " times.";
     }
+
+    /**
+ * Analyzes the usage and occupancy of parking spaces reserved for high-displacement vehicles.
+ */
+
     public String analyzeHighDisplacementSpaces(ParkingLot parkingLot) {
 
         int rejections =
@@ -247,6 +287,11 @@ public class ParkingAI implements Serializable {
                 + rejections
                 + " times.";
     }
+
+    /**
+ * Returns the day with the highest parking lot activity based on vehicle entries.
+ */
+
     public String getBusiestDay(ParkingLot parkingLot) {
 
         if (parkingLot.getTickets().isEmpty()) {
@@ -290,6 +335,11 @@ public class ParkingAI implements Serializable {
                 + days[busiestDay]
                 + " vehicle entries.";
     }
+
+    /****
+ * Predicts the revenue expected for the next day based on historical parking lot data and usage patterns.
+ */
+
     public String predictTomorrowRevenue(ParkingLot parkingLot) {
 
         if (parkingLot.getTickets().isEmpty()) {
