@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 /**
- * Represents a parking lot report.
- */
+* Represents a parking lot report.
+*/
 public class Report implements Serializable {
 
     private int totalVehicles;
@@ -13,6 +13,10 @@ public class Report implements Serializable {
     private int totalTickets;
     private ArrayList<Ticket> tickets;
     private ArrayList<Employee> employees;
+
+    /**
+    * Creates a report with parking lot statistics and collected data.
+    */
 
     public Report(int totalVehicles, double totalRevenue, int totalTickets, ArrayList<Ticket> tickets, ArrayList<Employee> employees) {
         this.totalVehicles = totalVehicles;
@@ -22,17 +26,33 @@ public class Report implements Serializable {
         this.employees = employees;
     }
 
+    /**
+    * Returns the total number of vehicles included in the report.
+    */
+
     public int getTotalVehicles() {
         return totalVehicles;
     }
+
+    /**
+    * Returns the total revenue included in the report.
+    */
 
     public double getTotalRevenue() {
         return totalRevenue;
     }
 
+    /**
+    * Returns the total number of tickets included in the report.
+    */
+
     public int getTotalTickets() {
         return totalTickets;
     }
+
+    /**
+    * Returns the number of paid tickets included in the report.
+    */
 
     public int getPaidTicketsCount() {
         int count = 0;
@@ -43,6 +63,11 @@ public class Report implements Serializable {
         }
         return count;
     }
+
+    /**
+    * Returns the average revenue generated per ticket.
+    */
+
     public double getAverageRevenuePerTicket() {
 
         if (tickets.isEmpty()) {
@@ -57,6 +82,11 @@ public class Report implements Serializable {
 
         return totalRevenue / tickets.size();
     }
+
+    /**
+    * Returns the total revenue generated through a specific payment method.
+    */
+
     public double getRevenueByPaymentMethod(String method) {
 
         double revenue = 0;
@@ -72,6 +102,11 @@ public class Report implements Serializable {
 
         return revenue;
     }
+
+    /**
+    * Returns the ticket that generated the highest revenue.
+    */
+
     public Ticket getHighestRevenueTicket() {
 
         Ticket highest = null;
@@ -87,6 +122,11 @@ public class Report implements Serializable {
 
         return highest;
     }
+
+    /**
+    * Returns the employee who processed the highest number of tickets.
+    */
+
     public Employee getMostActiveEmployee() {
 
         Employee mostActive = null;
@@ -103,6 +143,10 @@ public class Report implements Serializable {
 
         return mostActive;
     }
+
+    /**
+    * Generates a summary of the report data.
+    */
 
     public String generateSummary() {
 
@@ -154,6 +198,11 @@ public class Report implements Serializable {
 
         return summary;
     }
+
+    /**
+    * Returns the employee who generated the highest total revenue.
+    */
+
     public Employee getHighestRevenueEmployee() {
 
         Employee highest = null;
@@ -170,6 +219,11 @@ public class Report implements Serializable {
 
         return highest;
     }
+
+    /**
+    * Returns the most common type of vehicle included in the report.
+    */
+
     public String getMostCommonVehicleType() {
 
         int cars = 0;
@@ -192,6 +246,11 @@ public class Report implements Serializable {
 
         return "Tie (" + cars + " each)";
     }
+
+    /**
+    * Returns the ticket associated with the longest parking stay.
+    */
+
     public Ticket getLongestStayTicket() {
 
         Ticket longest = null;
@@ -215,6 +274,11 @@ public class Report implements Serializable {
 
         return longest;
     }
+
+    /**
+    * Returns information about the ticket with the longest parking stay.
+    */
+
     public String getLongestStayInfo() {
 
         Ticket longest = getLongestStayTicket();
@@ -231,6 +295,11 @@ public class Report implements Serializable {
         return longest.getVehicle().getPlate() +
                 " (" + minutes + " minutes)";
     }
+
+    /**
+    * Returns the vehicle that generated the highest total revenue.
+    */
+
     public Vehicle getHighestRevenueVehicle() {
 
         Vehicle highestVehicle = null;
@@ -246,6 +315,11 @@ public class Report implements Serializable {
 
         return highestVehicle;
     }
+
+    /**
+    * Returns information about the vehicle that generated the highest total revenue.
+    */
+
     public String getHighestRevenueVehicleInfo() {
 
         Ticket highestTicket = null;
@@ -266,6 +340,11 @@ public class Report implements Serializable {
         return highestTicket.getVehicle().getPlate()
                 + " ($" + highestTicket.getFee() + ")";
     }
+
+    /**
+    * Returns the hour with the highest parking activity.
+    */
+
     public String getPeakHour() {
 
         int[] hours = new int[24];

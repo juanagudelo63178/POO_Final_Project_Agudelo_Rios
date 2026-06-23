@@ -352,7 +352,9 @@ public class ParkingLot implements Serializable {
         return null;
     }
 
-
+    /**
+    * Finds and returns an employee based on their unique identifier.
+    */
     
     public Employee getEmployeeById(String id) {
 
@@ -365,6 +367,11 @@ public class ParkingLot implements Serializable {
 
         return null;
     }
+
+    /**
+    * Returns the total number of tickets processed by an employee.
+    */
+
     public int getTicketsByEmployee(String employeeId) {
 
         int count = 0;
@@ -379,6 +386,10 @@ public class ParkingLot implements Serializable {
         return count;
     }
 
+    /**
+    * Returns the total number of occupied parking spaces.
+    */
+
     public int getOccupiedSpots() {
 
         int occupied = 0;
@@ -392,6 +403,11 @@ public class ParkingLot implements Serializable {
 
         return occupied;
     }
+
+    /**
+    * Finds and returns a ticket based on its unique identifier.
+    */
+
     public Ticket findTicketById(String id) {
 
         for (Ticket ticket : tickets) {
@@ -403,6 +419,11 @@ public class ParkingLot implements Serializable {
 
         return null;
     }
+
+    /**
+    * Finds and returns a parking spot based on its floor and spot number.
+    */
+
     public ParkingSpot findParkingSpot(int floor, int spotNumber) {
 
         for (ParkingSpot spot : parkingSpots) {
@@ -416,6 +437,11 @@ public class ParkingLot implements Serializable {
 
         return null;
     }
+
+    /**
+    * Returns all vehicles currently parked on a specific floor.
+    */
+
     public ArrayList<Vehicle> getVehiclesByFloor(int floor) {
 
         ArrayList<Vehicle> vehiclesOnFloor = new ArrayList<>();
@@ -431,13 +457,27 @@ public class ParkingLot implements Serializable {
 
         return vehiclesOnFloor;
     }
+
+    /**
+    * Adds a parking floor to the parking lot.
+    */
+    
     public void addFloor(ParkingFloor floor) {
         floors.add(floor);
     }
 
+    /**
+    * Returns the list of parking floors in the parking lot.
+    */
+
     public ArrayList<ParkingFloor> getFloors() {
         return floors;
     }
+
+    /**
+    * Updates the brand of a registered vehicle.
+    */
+
     public boolean updateVehicleBrand(String plate, String newBrand) {
 
         Vehicle vehicle = findVehicle(plate);
@@ -449,6 +489,11 @@ public class ParkingLot implements Serializable {
 
         return false;
     }
+
+    /**
+    * Removes a vehicle from the parking lot records.
+    */
+
     public boolean removeVehicle(String plate) {
 
         Vehicle vehicle = findVehicle(plate);
@@ -467,20 +512,43 @@ public class ParkingLot implements Serializable {
 
         return false;
     }
+
+    /**
+    * Returns the number of times disabled parking spaces were insufficient.
+    */
+
     public int getDisabledRejections() {
         return disabledRejections;
     }
 
+    /**
+    * Returns the number of times high-displacement motorcycle spaces were insufficient.
+    */
+
     public int getHighDisplacementRejections() {
         return highDisplacementRejections;
     }
+
+    /**
+    * Records an occurrence where disabled parking spaces were insufficient.
+    */
+
     public void registerDisabledRejection() {
         disabledRejections++;
     }
 
+    /**
+    * Records an occurrence where high-displacement motorcycle spaces were insufficient.
+    */
+
     public void registerHighDisplacementRejection() {
         highDisplacementRejections++;
     }
+
+    /**
+    * Removes an employee from the parking lot system if allowed.
+    */
+
     public boolean removeEmployee(String id) {
 
         if (employees.size() <= 1) {
@@ -511,6 +579,11 @@ public class ParkingLot implements Serializable {
 
         return false;
     }
+
+    /**
+    * Returns an available regular parking spot for a car.
+    */
+
     public ParkingSpot getAvailableCarSpot() {
 
         for (ParkingSpot spot : parkingSpots) {
@@ -526,6 +599,11 @@ public class ParkingLot implements Serializable {
 
         return null;
     }
+
+    /**
+    * Returns an available regular parking spot for a motorcycle.
+    */
+
     public ParkingSpot getAvailableMotorcycleSpot() {
 
         for (ParkingSpot spot : parkingSpots) {
@@ -540,6 +618,11 @@ public class ParkingLot implements Serializable {
 
         return null;
     }
+
+    /**
+    * Checks whether an employee has associated tickets.
+    */
+
     public boolean employeeHasTickets(String employeeId) {
 
         for (Ticket ticket : tickets) {

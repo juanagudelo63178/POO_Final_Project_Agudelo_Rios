@@ -5,10 +5,15 @@ import java.io.Serializable;
 /**
  * Represents a payment.
  */
+
 public class Payment implements Serializable {
 
     private double amount;
     private String method;
+
+    /**
+    * Creates a payment with the specified amount and payment method.
+    */
 
     public Payment(double amount, String method) {
 
@@ -17,14 +22,25 @@ public class Payment implements Serializable {
         
     }
     
+    /**
+    * Returns the payment amount.
+    */
 
     public double getAmount() {
         return amount;
     }
 
+    /**
+    * Returns the payment method.
+    */
+
     public String getMethod() {
         return method;
     }
+
+    /**
+    * Processes the payment transaction.
+    */
 
     public boolean processPayment() {
 
@@ -36,9 +52,17 @@ public class Payment implements Serializable {
         return true;
     }
 
+    /**
+    * Checks whether the payment information is valid.
+    */
+
     public boolean isValid() {
         return amount >= 0;
     }
+
+    /**
+    * Generates a receipt for the completed payment.
+    */
 
     public String generateReceipt() {
 

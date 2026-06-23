@@ -23,6 +23,9 @@ public class Console {
 
     private DataManager dataManager;
     
+    /**
+    * Creates a console instance for interacting with the parking system.
+    */
 
     public Console() {
 
@@ -88,6 +91,10 @@ public class Console {
         }
        
     }
+
+    /**
+    * Starts the execution of the console application.
+    */
 
     public void start() {
 
@@ -205,6 +212,10 @@ public class Console {
         }while(option !=0);    
     }
 
+    /**
+    * Registers the entry of a vehicle into the parking system.
+    */
+
     private void registerVehicleEntry() {
         System.out.print("Enter plate: ");
         String plate = scanner.next();
@@ -305,6 +316,10 @@ public class Console {
 
     }
 
+    /**
+    * Registers the exit of a vehicle from the parking system.
+    */
+
     private void registerVehicleExit() {
         System.out.print("Enter plate: ");
 
@@ -358,6 +373,10 @@ public class Console {
         }
     }
 
+    /**
+    * Displays the available parking spots in the parking system.
+    */    
+
     private void showAvailableSpots() {
 
         System.out.println("\n===== AVAILABLE SPOTS =====");
@@ -376,6 +395,11 @@ public class Console {
         System.out.println("\nTotal Available Spots: "
                 + parkingLot.getAvailableSpots());
     }
+
+    /**
+    * Generates and displays a report with parking system statistics.
+    */
+
     private void generateReport() {
 
         Report report = parkingLot.generateReport();
@@ -418,6 +442,11 @@ public class Console {
         }
         dataManager.saveData(parkingLot);
     }
+
+    /**
+    * Searches for a vehicle in the parking system.
+    */
+
     private void searchVehicle() {
 
         System.out.print("Enter plate: ");
@@ -456,6 +485,11 @@ public class Console {
             System.out.println("Vehicle not found.");
         }
     }
+
+    /**
+    * Displays the vehicles currently parked in the parking system.
+    */
+
     private void showParkedVehicles() {
 
         System.out.println("\n===== PARKED VEHICLES =====");
@@ -486,6 +520,11 @@ public class Console {
         System.out.println("Total Parked Vehicles: "
                 + parkingLot.getVehicles().size());
     }
+
+    /**
+    * Displays the parked vehicles grouped by parking floor.
+    */
+
     private void showVehiclesByFloor() {
 
         System.out.print("Enter floor (1-5): ");
@@ -515,6 +554,11 @@ public class Console {
             System.out.println("No vehicles parked on this floor.");
         }
     }
+
+    /**
+    * Displays the parking spots that are currently occupied.
+    */
+
     private void showOccupiedSpots() {
 
         System.out.println("\n===== OCCUPIED SPOTS =====");
@@ -527,6 +571,11 @@ public class Console {
         System.out.println("C = Car");
         System.out.println("M = Motorcycle");
     }
+
+    /**
+    * Searches for an employee in the parking system.
+    */
+
     private void searchEmployee() {
 
         System.out.print("Enter employee ID: ");
@@ -556,6 +605,11 @@ public class Console {
             }
         }
     }
+
+    /**
+    * Searches for a ticket in the parking system.
+    */
+
     private void searchTicket() {
 
         System.out.print("Enter ticket ID: ");
@@ -584,7 +638,12 @@ public class Console {
             System.out.println("Ticket not found.");
         }
     }
-   private void showAllTickets() {
+
+    /**
+    * Displays all tickets registered in the parking system.
+    */
+
+    private void showAllTickets() {
 
         System.out.println("\n===== ALL TICKETS =====");
 
@@ -632,6 +691,11 @@ public class Console {
         System.out.println("Total Tickets: "
                 + parkingLot.getTickets().size());
     }
+
+    /**
+    * Searches for a parking spot in the parking system.
+    */
+
     private void searchParkingSpot() {
 
         System.out.print("Enter floor: ");
@@ -678,6 +742,11 @@ public class Console {
                     + vehicle.getClass().getSimpleName());
         }
     }
+
+    /**
+    * Displays statistical information about the parking system.
+    */
+
     private void showParkingStatistics() {
 
         int cars = 0;
@@ -700,6 +769,11 @@ public class Console {
         System.out.printf("Occupancy: %.2f%%\n",
                 parkingLot.predictOccupancy());
     }
+
+    /**
+    * Displays detailed information about each parking floor.
+    */
+
     private void showFloorDetails() {
 
         System.out.print("Enter floor: ");
@@ -745,6 +819,11 @@ public class Console {
                 System.out.println("Invalid option.");
         }
     }
+
+    /**
+    * Displays a ranking of employees based on their performance or activity.
+    */
+
     private void showEmployeeRanking() {
 
         System.out.println("\n===== EMPLOYEE RANKING =====");
@@ -770,6 +849,11 @@ public class Console {
                     + employee.getRevenueGenerated());
         }
     }
+
+    /**
+    * Modifies the information of a vehicle registered in the parking system.
+    */
+
     private void modifyVehicle() {
 
         System.out.print("Enter plate: ");
@@ -784,6 +868,11 @@ public class Console {
             System.out.println("Vehicle not found.");
         }
     }
+
+    /**
+    * Removes a vehicle from the parking system.
+    */
+
     private void deleteVehicle() {
 
         System.out.print("Enter plate: ");
@@ -797,6 +886,11 @@ public class Console {
             );
         }
     }
+
+    /**
+    * Displays and manages the Parking AI menu options.
+    */
+
     private void parkingAIMenu() {
 
         System.out.println("\n===== PARKING AI =====");
@@ -863,6 +957,11 @@ public class Console {
                 System.out.println("Invalid option.");
         }
     }
+
+    /**
+    * Registers a new employee in the parking system.
+    */
+
     private void registerEmployee() {
 
         System.out.print("Employee ID: ");
@@ -880,6 +979,11 @@ public class Console {
 
         System.out.println("Employee registered successfully.");
     }
+
+    /**
+    * Removes an employee from the parking system.
+    */
+
     private void fireEmployee() {
 
         System.out.print("Employee ID: ");
@@ -894,6 +998,11 @@ public class Console {
             System.out.println("Employee could not be removed.");
         }
     }
+
+    /**
+    * Displays all employees registered in the parking system.
+    */
+
     private void showEmployees() {
 
         System.out.println("\n===== EMPLOYEES =====");
